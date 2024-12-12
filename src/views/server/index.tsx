@@ -10,20 +10,18 @@ import { Button } from "@/components/ui/button";
 import { AddReview } from "@/components/add-review";
 import CopyButton from "@/components/copy-button";
 import Review from "./components/review";
+import useSubscription from "../../hooks/use-subscription";
+import { isServerPaid, isServerWhitelist } from "../../helpers/server";
+import { NostrEvent } from "nostr-tools";
 
-export default function ServerDetailsView() {
-  const params = useParams();
+function ServerDetailsPage({ url, server }: { url: URL; server: NostrEvent }) {
+  const reviews = useStoreQuery(TimelineQuery, [{ "#d": [url.toString()], kinds: [SERVER_REVIEW_KIND] }]);
 
-  if (!params.server) return <Navigate to="/" />;
-
-  const d = new URL("https://" + params.server).toString();
-
-  // TODO: handle multiple server events
-  const server = useStoreQuery(TimelineQuery, [{ "#d": [d], kinds: [SERVER_ADVERTIZEMENT_KIND] }])?.[0];
-  const reviews = useStoreQuery(TimelineQuery, [{ "#d": [d], kinds: [SERVER_REVIEW_KIND] }]);
+  console.log("viewing", server);
 
   const names = server && getTagValue(server, "name");
-  const url = new URL("/", d);
+  const paid = isServerPaid(server);
+  const whitelist = isServerWhitelist(server);
 
   return (
     <>
@@ -42,6 +40,19 @@ export default function ServerDetailsView() {
 
       <p className="py-2">{server?.content}</p>
 
+      {paid && (
+        <>
+          <h3 className="text-xl">Requires payment</h3>
+          {typeof paid === "string" && <p className="pb-2">{paid}</p>}
+        </>
+      )}
+      {whitelist && (
+        <>
+          <h3 className="text-xl">Whitelist</h3>
+          {typeof whitelist === "string" && <p className="pb-2">{whitelist}</p>}
+        </>
+      )}
+
       <div className="flex gap-2 pt-2">
         <h3 className="text-2xl">Reviews ({reviews?.length})</h3>
         <AddReview server={url} />
@@ -52,4 +63,20 @@ export default function ServerDetailsView() {
       </div>
     </>
   );
+}
+
+export default function ServerDetailsView() {
+  const params = useParams();
+  if (!params.server) return <Navigate to="/" />;
+
+  const url = new URL("https://" + params.server);
+
+  // load events
+  useSubscription(url.toString(), { "#d": [url.toString()], kinds: [SERVER_ADVERTIZEMENT_KIND, SERVER_REVIEW_KIND] });
+
+  // TODO: handle multiple server events
+  const server = useStoreQuery(TimelineQuery, [{ "#d": [url.toString()], kinds: [SERVER_ADVERTIZEMENT_KIND] }])?.[0];
+
+  if (server) return <ServerDetailsPage url={url} server={server} />;
+  else return <p>Loading...</p>;
 }

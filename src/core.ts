@@ -1,13 +1,17 @@
 import { createRxNostr, nip07Signer } from "rx-nostr";
 import { verifier } from "rx-nostr-crypto";
 import { EventStore, QueryStore } from "applesauce-core";
+import { EventFactory } from "applesauce-factory";
 
 export const eventStore = new EventStore();
 export const queryStore = new QueryStore(eventStore);
 
+export const signer = nip07Signer();
+export const factory = new EventFactory({ signer });
+
 export const rxNostr = createRxNostr({
   verifier,
-  signer: nip07Signer(),
+  signer,
   connectionStrategy: "lazy-keep",
 });
 

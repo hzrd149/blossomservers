@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Star } from "lucide-react";
 import Rating from "react-rating";
+import { firstValueFrom } from "rxjs";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,12 +15,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { useEventFactory } from "applesauce-react/hooks";
 
 import { rxNostr } from "../core";
 import { SERVER_REVIEW_KIND } from "../const";
 import { Textarea } from "./ui/textarea";
+import { includeSingletonTag, setContent } from "applesauce-factory/operations";
 
 export function AddReview({ server }: { server: URL }) {
+  const [open, setOpen] = useState(false);
+  const factory = useEventFactory();
   const form = useForm({
     defaultValues: {
       content: "",
@@ -34,20 +40,27 @@ export function AddReview({ server }: { server: URL }) {
       return alert("Select rating first");
     }
 
-    rxNostr.send({
-      kind: SERVER_REVIEW_KIND,
-      content: values.content,
-      tags: [
-        ["d", url],
-        ["rating", (values.rating / 5).toFixed(2)],
-      ],
-    });
+    const draft = await factory.process(
+      { kind: SERVER_REVIEW_KIND, tags: [["d", url]] },
+      setContent(values.content),
+      includeSingletonTag(["rating", (values.rating / 5).toFixed(2)]),
+    );
+
+    await firstValueFrom(rxNostr.send(draft));
+
+    setOpen(false);
   });
 
   form.watch("rating");
 
   return (
-    <Dialog onOpenChange={() => form.reset()}>
+    <Dialog
+      open={open}
+      onOpenChange={(v) => {
+        form.reset();
+        setOpen(v);
+      }}
+    >
       <DialogTrigger asChild>
         <Button variant="outline" className="self-end">
           Add Review

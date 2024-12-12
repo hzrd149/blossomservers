@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,36 +12,60 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
+import { useEventFactory } from "applesauce-react/hooks";
+import { includeSingletonTag, setContent } from "applesauce-factory/operations";
+import { fillAndTrimTag } from "applesauce-factory/helpers";
+import { firstValueFrom } from "rxjs";
 
 import { rxNostr } from "../core";
 import { SERVER_ADVERTIZEMENT_KIND } from "../const";
 import { Textarea } from "./ui/textarea";
+import { Checkbox } from "./ui/checkbox";
 
 export function AddServer() {
+  const [open, setOpen] = useState(false);
+  const factory = useEventFactory();
   const form = useForm({
     defaultValues: {
       domain: "",
       name: "",
       description: "",
+      paid: false,
+      paidDescription: "",
+      whitelist: false,
+      whitelistDescription: "",
     },
     mode: "all",
   });
 
+  form.watch("paid");
+  form.watch("whitelist");
+
   const submit = form.handleSubmit(async (values) => {
+    if (!factory) return;
     const url = new URL("/", values.domain).toString();
 
-    rxNostr.send({
-      kind: SERVER_ADVERTIZEMENT_KIND,
-      content: values.description,
-      tags: [
-        ["d", url],
-        ["name", values.name],
-      ],
-    });
+    const draft = await factory.process(
+      { kind: SERVER_ADVERTIZEMENT_KIND, tags: [["d", url]] },
+      setContent(values.description),
+      includeSingletonTag(["name", values.name]),
+      values.paid ? includeSingletonTag(fillAndTrimTag(["paid", values.paidDescription])) : undefined,
+      values.whitelist ? includeSingletonTag(fillAndTrimTag(["whitelist", values.whitelistDescription])) : undefined,
+    );
+
+    await firstValueFrom(rxNostr.send(draft));
+
+    setOpen(false);
   });
 
   return (
-    <Dialog onOpenChange={() => form.reset()}>
+    <Dialog
+      open={open}
+      onOpenChange={(v) => {
+        form.reset();
+        setOpen(v);
+      }}
+    >
       <DialogTrigger asChild>
         <Button>Add Server</Button>
       </DialogTrigger>
@@ -77,6 +102,45 @@ export function AddServer() {
             <Label htmlFor="description">Description</Label>
             <Textarea id="description" placeholder="Short server description" {...form.register("description")} />
           </div>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="paid"
+              checked={form.getValues("paid")}
+              onCheckedChange={(checked) => form.setValue("paid", !!checked, { shouldDirty: true, shouldTouch: true })}
+            />
+            <label
+              htmlFor="paid"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Requires payment
+            </label>
+          </div>
+          {form.getValues("paid") && (
+            <Input id="paidDescription" placeholder="Describe payment" {...form.register("paidDescription")} />
+          )}
+
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="whitelist"
+              checked={form.getValues("whitelist")}
+              onCheckedChange={(checked) =>
+                form.setValue("whitelist", !!checked, { shouldDirty: true, shouldTouch: true })
+              }
+            />
+            <label
+              htmlFor="whitelist"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Has whitelist
+            </label>
+          </div>
+          {form.getValues("whitelist") && (
+            <Input
+              id="whitelistDescription"
+              placeholder="Describe payment"
+              {...form.register("whitelistDescription")}
+            />
+          )}
         </form>
         <DialogFooter>
           <Button type="submit" disabled={form.formState.isSubmitting} form="add-server">
