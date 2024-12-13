@@ -4,11 +4,20 @@ import hash from "hash-sum";
 import { createRxForwardReq } from "rx-nostr";
 import { nanoid } from "nanoid";
 
-import { rxNostr } from "../core";
+import { eventStore, rxNostr } from "../core";
+import { cacheRequest } from "../cache";
 
 export default function useSubscription(id: string, filters: Filter | Filter[]) {
   id = id || useMemo(() => nanoid(), []);
   const rxReq = useMemo(() => createRxForwardReq(id), [id]);
+
+  // load from cache
+  useEffect(() => {
+    const sub = cacheRequest(Array.isArray(filters) ? filters : [filters]).subscribe({
+      next: (e) => eventStore.add(e),
+      complete: () => sub.unsubscribe(),
+    });
+  }, [hash(filters)]);
 
   // attach to rxNostr
   const observable = useMemo(() => rxNostr.use(rxReq), [rxReq]);

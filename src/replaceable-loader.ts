@@ -1,7 +1,9 @@
 import { ReplaceableLoader } from "applesauce-loaders/loaders";
 import { eventStore, rxNostr } from "./core";
+import { cacheRequest } from "./cache";
 
 const replaceableLoader = new ReplaceableLoader(rxNostr, {
+  cacheRequest,
   bufferTime: 500,
   lookupRelays: ["wss://purplepag.es/"],
 });
