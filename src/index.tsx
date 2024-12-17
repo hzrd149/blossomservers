@@ -12,7 +12,7 @@ import ReviewsView from "./views/reviews";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
-    <QueryStoreProvider store={queryStore}>
+    <QueryStoreProvider queryStore={queryStore}>
       <FactoryProvider factory={factory}>
         <Layout>
           <Routes>
