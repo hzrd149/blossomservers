@@ -17,7 +17,7 @@ import { includeSingletonTag, setContent } from "applesauce-factory/operations";
 import { fillAndTrimTag } from "applesauce-factory/helpers";
 import { firstValueFrom } from "rxjs";
 
-import { rxNostr } from "../core";
+import { rxNostr } from "../nostr";
 import { SERVER_ADVERTIZEMENT_KIND } from "../const";
 import { Textarea } from "./ui/textarea";
 import { Checkbox } from "./ui/checkbox";

@@ -1,5 +1,5 @@
 import { ReplaceableLoader } from "applesauce-loaders/loaders";
-import { eventStore, rxNostr } from "./core";
+import { eventStore, rxNostr } from "./nostr";
 import { cacheRequest } from "./cache";
 
 const replaceableLoader = new ReplaceableLoader(rxNostr, {

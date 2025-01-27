@@ -3,6 +3,7 @@ import { ExternalLink } from "lucide-react";
 import { TimelineQuery } from "applesauce-core/queries";
 import { useStoreQuery } from "applesauce-react/hooks";
 import { getEventUID, getTagValue } from "applesauce-core/helpers";
+import { NostrEvent } from "nostr-tools";
 
 import { SERVER_ADVERTIZEMENT_KIND, SERVER_REVIEW_KIND } from "@/const";
 import Header from "@/components/layout/header";
@@ -12,12 +13,9 @@ import CopyButton from "@/components/copy-button";
 import Review from "./components/review";
 import useSubscription from "../../hooks/use-subscription";
 import { isServerPaid, isServerWhitelist } from "../../helpers/server";
-import { NostrEvent } from "nostr-tools";
 
 function ServerDetailsPage({ url, server }: { url: URL; server: NostrEvent }) {
   const reviews = useStoreQuery(TimelineQuery, [{ "#d": [url.toString()], kinds: [SERVER_REVIEW_KIND] }]);
-
-  console.log("viewing", server);
 
   const names = server && getTagValue(server, "name");
   const paid = isServerPaid(server);

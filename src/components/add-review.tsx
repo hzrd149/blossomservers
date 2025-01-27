@@ -17,7 +17,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { useEventFactory } from "applesauce-react/hooks";
 
-import { rxNostr } from "../core";
+import { rxNostr } from "../nostr";
 import { SERVER_REVIEW_KIND } from "../const";
 import { Textarea } from "./ui/textarea";
 import { includeSingletonTag, setContent } from "applesauce-factory/operations";

@@ -5,7 +5,7 @@ import "window.nostr.js";
 
 import "./index.css";
 import HomeView from "./views/home/index.tsx";
-import { factory, queryStore } from "./core";
+import { factory, queryStore } from "./nostr.ts";
 import ServerDetailsView from "./views/server/index.tsx";
 import Layout from "./components/layout/layout";
 import ReviewsView from "./views/reviews";

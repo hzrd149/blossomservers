@@ -4,7 +4,7 @@ import hash from "hash-sum";
 import { createRxForwardReq } from "rx-nostr";
 import { nanoid } from "nanoid";
 
-import { eventStore, rxNostr } from "../core";
+import { eventStore, rxNostr } from "../nostr";
 import { cacheRequest } from "../cache";
 
 export default function useSubscription(id: string, filters: Filter | Filter[]) {
