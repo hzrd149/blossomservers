@@ -1,6 +1,6 @@
 import { getEventUID, getTagValue, NostrEvent } from "applesauce-core/helpers";
 import { TimelineModel } from "applesauce-core/models";
-import { useEventModel, useObservable, useObservableState } from "applesauce-react/hooks";
+import { useEventModel, useObservableState } from "applesauce-react/hooks";
 import { ExternalLink } from "lucide-react";
 import { Navigate, useParams } from "react-router-dom";
 
