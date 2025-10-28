@@ -1,6 +1,5 @@
-import { getTagValue } from "applesauce-core/helpers";
+import { getTagValue, NostrEvent } from "applesauce-core/helpers";
 import { Star } from "lucide-react";
-import { NostrEvent } from "nostr-tools";
 import { useMemo } from "react";
 import Rating from "react-rating";
 

@@ -1,17 +1,17 @@
 import { getEventUID } from "applesauce-core/helpers";
-import { TimelineQuery } from "applesauce-core/queries";
-import { useStoreQuery } from "applesauce-react/hooks";
+import { TimelineModel } from "applesauce-core/models";
+import { useEventModel, useObservableState } from "applesauce-react/hooks";
 
 import Header from "@/components/layout/header";
 import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { SERVER_REVIEW_KIND } from "@/const";
-import useSubscription from "@/hooks/use-subscription";
+import { DEFAULT_RELAYS, SERVER_REVIEW_KIND } from "@/const";
 import ReviewRow from "./components/review-row";
+import { eventStore, pool } from "../../nostr";
 
 export default function ReviewsView() {
-  const reviews = useStoreQuery(TimelineQuery, [{ kinds: [SERVER_REVIEW_KIND] }]);
+  const reviews = useEventModel(TimelineModel, [{ kinds: [SERVER_REVIEW_KIND] }]);
 
-  useSubscription("reviews", { kinds: [SERVER_REVIEW_KIND] });
+  useObservableState(() => pool.subscription(DEFAULT_RELAYS, { kinds: [SERVER_REVIEW_KIND] }, { eventStore }));
 
   return (
     <>

@@ -1,10 +1,10 @@
+import { NostrEvent } from "applesauce-core/helpers";
 import { Star } from "lucide-react";
 import Rating from "react-rating";
-import { NostrEvent } from "nostr-tools";
 
-import getReviewRating from "@/helpers/review";
-import UserName from "@/components/user/user-name";
 import UserAvatar from "@/components/user/user-avatar";
+import UserName from "@/components/user/user-name";
+import getReviewRating from "@/helpers/review";
 
 export default function Review({ review }: { review: NostrEvent }) {
   const rating = getReviewRating(review);

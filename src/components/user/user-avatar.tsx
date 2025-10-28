@@ -1,25 +1,17 @@
-import { useEffect } from "react";
-import { useStoreQuery } from "applesauce-react/hooks";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { ProfileQuery } from "applesauce-core/queries";
+import { getDisplayName, getProfilePicture } from "applesauce-core/helpers";
+import { useObservableMemo } from "applesauce-react/hooks";
 
-import replaceableLoader from "../../replaceable-loader";
+import { eventStore } from "../../nostr";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function UserAvatar({ pubkey }: { pubkey: string }) {
-  const metadata = useStoreQuery(ProfileQuery, [pubkey]);
-  useEffect(() => {
-    replaceableLoader.next({ kind: 0, pubkey });
-  }, [pubkey]);
-
-  const name = metadata?.display_name || metadata?.name;
+  const profile = useObservableMemo(() => eventStore.profile(pubkey), [pubkey]);
+  const name = getDisplayName(profile);
 
   return (
     <Avatar>
       <AvatarFallback>{name?.slice(0, 1) || "U"}</AvatarFallback>
-      <AvatarImage
-        src={metadata?.picture || metadata?.image}
-        alt={metadata?.display_name || metadata?.name || pubkey.slice(0, 8)}
-      />
+      <AvatarImage src={getProfilePicture(profile)} alt={name} />
     </Avatar>
   );
 }

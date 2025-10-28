@@ -1,8 +1,7 @@
+import { Star } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Star } from "lucide-react";
 import Rating from "react-rating";
-import { firstValueFrom } from "rxjs";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,12 +14,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Content, includeSingletonTag } from "applesauce-factory/operations";
 import { useEventFactory } from "applesauce-react/hooks";
 
-import { rxNostr } from "../nostr";
-import { SERVER_REVIEW_KIND } from "../const";
+import { DEFAULT_RELAYS, SERVER_REVIEW_KIND } from "../const";
+import { pool } from "../nostr";
 import { Textarea } from "./ui/textarea";
-import { includeSingletonTag, setContent } from "applesauce-factory/operations";
 
 export function AddReview({ server }: { server: URL }) {
   const [open, setOpen] = useState(false);
@@ -40,13 +39,15 @@ export function AddReview({ server }: { server: URL }) {
       return alert("Select rating first");
     }
 
-    const draft = await factory.process(
+    const draft = await factory.build(
       { kind: SERVER_REVIEW_KIND, tags: [["d", url]] },
-      setContent(values.content),
+      Content.setContent(values.content),
       includeSingletonTag(["rating", (values.rating / 5).toFixed(2)]),
     );
 
-    await firstValueFrom(rxNostr.send(draft));
+    const event = await factory.sign(draft);
+
+    await pool.publish(DEFAULT_RELAYS, event);
 
     setOpen(false);
   });

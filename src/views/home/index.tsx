@@ -1,17 +1,26 @@
-import { TimelineQuery } from "applesauce-core/queries";
-import { useStoreQuery } from "applesauce-react/hooks";
+import { TimelineModel } from "applesauce-core/models";
+import { useEventModel, useObservableState } from "applesauce-react/hooks";
+import { useEffect } from "react";
 
 import Header from "@/components/layout/header";
-import { SERVER_ADVERTIZEMENT_KIND, SERVER_REVIEW_KIND } from "@/const";
-import useSubscription from "@/hooks/use-subscription";
+import { DEFAULT_RELAYS, SERVER_ADVERTIZEMENT_KIND, SERVER_REVIEW_KIND } from "@/const";
 
 import ServersTable from "../../components/servers-table";
+import { cacheRequest, eventStore, pool } from "../../nostr";
 
 export default function HomeView() {
-  useSubscription("servers", { kinds: [SERVER_ADVERTIZEMENT_KIND] });
-  useSubscription("reviews", { kinds: [SERVER_REVIEW_KIND] });
+  useObservableState(() =>
+    pool.subscription(DEFAULT_RELAYS, { kinds: [SERVER_ADVERTIZEMENT_KIND, SERVER_REVIEW_KIND] }, { eventStore }),
+  );
 
-  const servers = useStoreQuery(TimelineQuery, [{ kinds: [SERVER_ADVERTIZEMENT_KIND] }]);
+  // Load events from cache
+  useEffect(() => {
+    cacheRequest([{ kinds: [SERVER_ADVERTIZEMENT_KIND, SERVER_REVIEW_KIND] }]).then((events) => {
+      for (const event of events) eventStore.add(event);
+    });
+  }, []);
+
+  const servers = useEventModel(TimelineModel, [{ kinds: [SERVER_ADVERTIZEMENT_KIND] }]);
 
   return (
     <>

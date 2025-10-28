@@ -1,38 +1,48 @@
-import { createRxNostr, nip07Signer } from "rx-nostr";
-import { verifier } from "rx-nostr-crypto";
-import { EventStore, QueryStore } from "applesauce-core";
+import { EventStore } from "applesauce-core";
+import { Filter, NostrEvent, persistEventsToCache } from "applesauce-core/helpers";
 import { EventFactory } from "applesauce-factory";
-import { isFromCache } from "applesauce-core/helpers";
-import cache from "./cache";
+import { createAddressLoader, createEventLoader } from "applesauce-loaders/loaders";
+import { RelayPool } from "applesauce-relay";
+import { ExtensionSigner } from "applesauce-signers";
+import { DEFAULT_LOOKUP_RELAYS, DEFAULT_RELAYS } from "./const";
 
 export const eventStore = new EventStore();
-export const queryStore = new QueryStore(eventStore);
 
-export const signer = nip07Signer();
+// Create signer for creating events
+export const signer = new ExtensionSigner();
+
+// Create factory for creating events
 export const factory = new EventFactory({ signer });
 
-export const rxNostr = createRxNostr({
-  verifier,
-  signer,
-  connectionStrategy: "lazy-keep",
+// Create relay pool for connections
+export const pool = new RelayPool();
+
+// Persist all new events to cache
+persistEventsToCache(eventStore, async (events) => {
+  await Promise.allSettled(events.map((event) => window.nostrdb.add(event)));
 });
 
-// send all events to eventStore
-rxNostr.createAllEventObservable().subscribe((message) => {
-  const event = eventStore.add(message.event, message.from);
-
-  // save the event to cache
-  if (!isFromCache(event)) cache.publish(event);
-});
-
-// set default relays
-rxNostr.setDefaultRelays(["wss://nostrue.com/", "wss://relay.primal.net/", "wss://nos.lol/", "wss://relay.damus.io/"]);
-
-if (import.meta.env.DEV) {
-  // @ts-expect-error
-  window.eventStore = eventStore;
-  // @ts-expect-error
-  window.queryStore = queryStore;
-  // @ts-expect-error
-  window.rxNostr = rxNostr;
+// Load events from cache
+export function cacheRequest(filters: Filter[]): Promise<NostrEvent[]> {
+  return window.nostrdb.filters(filters);
 }
+
+// Create replaceable loader for addressable events
+const replaceableLoader = createAddressLoader(pool, {
+  eventStore,
+  cacheRequest,
+  extraRelays: DEFAULT_RELAYS,
+  lookupRelays: DEFAULT_LOOKUP_RELAYS,
+});
+
+// Create event loader for single events
+const eventLoader = createEventLoader(pool, {
+  eventStore,
+  cacheRequest,
+  extraRelays: DEFAULT_RELAYS,
+});
+
+// Attach the loaders to the event store
+eventStore.addressableLoader = replaceableLoader;
+eventStore.replaceableLoader = replaceableLoader;
+eventStore.eventLoader = eventLoader;

@@ -1,10 +1,9 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { getEventUID, getTagValue } from "applesauce-core/helpers";
-import { TimelineQuery } from "applesauce-core/queries";
-import { useStoreQuery } from "applesauce-react/hooks";
+import { getEventUID, getTagValue, NostrEvent } from "applesauce-core/helpers";
+import { TimelineModel } from "applesauce-core/models";
+import { useEventModel } from "applesauce-react/hooks";
 import { SquareArrowOutUpRight, Star } from "lucide-react";
-import { NostrEvent } from "nostr-tools";
 
 import { SERVER_REVIEW_KIND } from "@/const";
 import useCheckMobile from "@/hooks/use-check-mobile";
@@ -50,7 +49,7 @@ function ServersTable({ servers }: { servers?: NostrEvent[] }) {
 }
 
 function useServerReviews(url: URL) {
-  return useStoreQuery(TimelineQuery, [{ kinds: [SERVER_REVIEW_KIND], "#d": [url.toString()] }]);
+  return useEventModel(TimelineModel, [{ kinds: [SERVER_REVIEW_KIND], "#d": [url.toString()] }]);
 }
 function useServerAverage(reviews: NostrEvent[] | undefined) {
   return useMemo(() => {

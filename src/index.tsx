@@ -1,18 +1,19 @@
+import { EventStoreProvider, FactoryProvider } from "applesauce-react/providers";
 import { createRoot } from "react-dom/client";
-import { QueryStoreProvider, FactoryProvider } from "applesauce-react/providers";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "window.nostr.js";
-
+import "window.nostrdb.js";
 import "./index.css";
-import HomeView from "./views/home/index.tsx";
-import { factory, queryStore } from "./nostr.ts";
-import ServerDetailsView from "./views/server/index.tsx";
+
 import Layout from "./components/layout/layout";
+import { eventStore, factory } from "./nostr.ts";
+import HomeView from "./views/home/index.tsx";
 import ReviewsView from "./views/reviews";
+import ServerDetailsView from "./views/server/index.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
-    <QueryStoreProvider queryStore={queryStore}>
+    <EventStoreProvider eventStore={eventStore}>
       <FactoryProvider factory={factory}>
         <Layout>
           <Routes>
@@ -22,6 +23,6 @@ createRoot(document.getElementById("root")!).render(
           </Routes>
         </Layout>
       </FactoryProvider>
-    </QueryStoreProvider>
+    </EventStoreProvider>
   </BrowserRouter>,
 );

@@ -1,11 +1,12 @@
 {
   "relays": ["wss://nostrue.com", "wss://relay.damus.io", "wss://relay.primal.net"],
-  "servers": ["https://nostr.download", "https://cdn.hzrd149.com"],
+  "servers": ["https://cdn.hzrd149.com", "https://nostr.download", "https://24242.io"],
   "profile": {
     "name": "blossomservers.com",
+    "display_name": "blossomservers.com",
     "about": "Discover public blossom servers"
   },
   "publishProfile": true,
-  "publishServerList": true,
-  "publishRelayList": true
+  "publishRelayList": true,
+  "publishServerList": true
 }

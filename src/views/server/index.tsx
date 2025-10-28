@@ -1,21 +1,20 @@
-import { Navigate, useParams } from "react-router-dom";
+import { getEventUID, getTagValue, NostrEvent } from "applesauce-core/helpers";
+import { TimelineModel } from "applesauce-core/models";
+import { useEventModel, useObservable, useObservableState } from "applesauce-react/hooks";
 import { ExternalLink } from "lucide-react";
-import { TimelineQuery } from "applesauce-core/queries";
-import { useStoreQuery } from "applesauce-react/hooks";
-import { getEventUID, getTagValue } from "applesauce-core/helpers";
-import { NostrEvent } from "nostr-tools";
+import { Navigate, useParams } from "react-router-dom";
 
-import { SERVER_ADVERTIZEMENT_KIND, SERVER_REVIEW_KIND } from "@/const";
-import Header from "@/components/layout/header";
-import { Button } from "@/components/ui/button";
 import { AddReview } from "@/components/add-review";
 import CopyButton from "@/components/copy-button";
-import Review from "./components/review";
-import useSubscription from "../../hooks/use-subscription";
+import Header from "@/components/layout/header";
+import { Button } from "@/components/ui/button";
+import { DEFAULT_RELAYS, SERVER_ADVERTIZEMENT_KIND, SERVER_REVIEW_KIND } from "@/const";
 import { isServerPaid, isServerWhitelist } from "../../helpers/server";
+import { eventStore, pool } from "../../nostr";
+import Review from "./components/review";
 
 function ServerDetailsPage({ url, server }: { url: URL; server: NostrEvent }) {
-  const reviews = useStoreQuery(TimelineQuery, [{ "#d": [url.toString()], kinds: [SERVER_REVIEW_KIND] }]);
+  const reviews = useEventModel(TimelineModel, [{ "#d": [url.toString()], kinds: [SERVER_REVIEW_KIND] }]);
 
   const names = server && getTagValue(server, "name");
   const paid = isServerPaid(server);
@@ -70,10 +69,19 @@ export default function ServerDetailsView() {
   const url = new URL("https://" + params.server);
 
   // load events
-  useSubscription(url.toString(), { "#d": [url.toString()], kinds: [SERVER_ADVERTIZEMENT_KIND, SERVER_REVIEW_KIND] });
+  useObservableState(() =>
+    pool.subscription(
+      DEFAULT_RELAYS,
+      {
+        "#d": [url.toString()],
+        kinds: [SERVER_ADVERTIZEMENT_KIND, SERVER_REVIEW_KIND],
+      },
+      { eventStore },
+    ),
+  );
 
   // TODO: handle multiple server events
-  const server = useStoreQuery(TimelineQuery, [{ "#d": [url.toString()], kinds: [SERVER_ADVERTIZEMENT_KIND] }])?.[0];
+  const server = useEventModel(TimelineModel, [{ "#d": [url.toString()], kinds: [SERVER_ADVERTIZEMENT_KIND] }])?.[0];
 
   if (server) return <ServerDetailsPage url={url} server={server} />;
   else return <p>Loading...</p>;

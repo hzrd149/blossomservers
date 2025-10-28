@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,16 +10,16 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
+import { includeSingletonTag } from "applesauce-factory/operations";
 import { useEventFactory } from "applesauce-react/hooks";
-import { includeSingletonTag, setContent } from "applesauce-factory/operations";
-import { fillAndTrimTag } from "applesauce-factory/helpers";
-import { firstValueFrom } from "rxjs";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 
-import { rxNostr } from "../nostr";
-import { SERVER_ADVERTIZEMENT_KIND } from "../const";
-import { Textarea } from "./ui/textarea";
+import { setContent } from "applesauce-factory/operations/content";
+import { DEFAULT_RELAYS, SERVER_ADVERTIZEMENT_KIND } from "../const";
+import { pool } from "../nostr";
 import { Checkbox } from "./ui/checkbox";
+import { Textarea } from "./ui/textarea";
 
 export function AddServer() {
   const [open, setOpen] = useState(false);
@@ -45,15 +44,17 @@ export function AddServer() {
     if (!factory) return;
     const url = new URL("/", values.domain).toString();
 
-    const draft = await factory.process(
+    const draft = await factory.build(
       { kind: SERVER_ADVERTIZEMENT_KIND, tags: [["d", url]] },
       setContent(values.description),
       includeSingletonTag(["name", values.name]),
-      values.paid ? includeSingletonTag(fillAndTrimTag(["paid", values.paidDescription])) : undefined,
-      values.whitelist ? includeSingletonTag(fillAndTrimTag(["whitelist", values.whitelistDescription])) : undefined,
+      values.paid ? includeSingletonTag(["paid", values.paidDescription]) : undefined,
+      values.whitelist ? includeSingletonTag(["whitelist", values.whitelistDescription]) : undefined,
     );
 
-    await firstValueFrom(rxNostr.send(draft));
+    const event = await factory.sign(draft);
+
+    await pool.publish(DEFAULT_RELAYS, event);
 
     setOpen(false);
   });

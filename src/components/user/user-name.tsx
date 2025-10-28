@@ -1,14 +1,10 @@
-import { useEffect } from "react";
-import { useStoreQuery } from "applesauce-react/hooks";
-import { ProfileQuery } from "applesauce-core/queries";
+import { useObservableMemo } from "applesauce-react/hooks";
+import { getDisplayName } from "applesauce-core/helpers";
 
-import replaceableLoader from "../../replaceable-loader";
+import { eventStore } from "../../nostr";
 
 export default function UserName({ pubkey }: { pubkey: string }) {
-  const metadata = useStoreQuery(ProfileQuery, [pubkey]);
-  useEffect(() => {
-    replaceableLoader.next({ kind: 0, pubkey });
-  }, [pubkey]);
+  const profile = useObservableMemo(() => eventStore.profile(pubkey), [pubkey]);
 
-  return <span>{metadata?.display_name || metadata?.name || pubkey.slice(0, 8)}</span>;
+  return <span>{getDisplayName(profile, pubkey.slice(0, 8))}</span>;
 }
