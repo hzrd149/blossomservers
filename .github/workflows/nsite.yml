@@ -1,8 +1,13 @@
 name: Deploy nsite
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
+
+concurrency:
+  group: "nsite"
+  cancel-in-progress: true
 
 jobs:
   deploy:
@@ -13,10 +18,10 @@ jobs:
 
       - uses: pnpm/action-setup@v4
 
-      - name: Setup Node.js 20
+      - name: Setup Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: "pnpm"
 
       - name: Install Dependencies
@@ -25,13 +30,8 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Redirect 404 to Index for SPA
-        run: cp dist/index.html dist/404.html
-
       - name: Deploy to nsite
-        uses: sandwichfarm/nsite-action@v0.2.2
+        uses: sandwichfarm/nsite-action@v0.3.0
         with:
-          nbunksec: ${{ secrets.NSITE_KEY }}
+          nbunksec: ${{ secrets.NSITE_BUNKER }}
           directory: "./dist"
-          force: true
-          purge: true

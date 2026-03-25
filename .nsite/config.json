@@ -1,12 +1,17 @@
 {
-  "relays": ["wss://nostrue.com", "wss://relay.damus.io", "wss://relay.primal.net"],
-  "servers": ["https://cdn.hzrd149.com", "https://nostr.download", "https://24242.io"],
-  "profile": {
-    "name": "blossomservers.com",
-    "display_name": "blossomservers.com",
-    "about": "Discover public blossom servers"
-  },
-  "publishProfile": true,
-  "publishRelayList": true,
-  "publishServerList": true
+  "bunkerPubkey": "266815e0c9210dfa324c6cba3573b14bee49da4209a9456f9484e5106cd408a5",
+  "relays": [
+    "wss://relay.primal.net",
+    "wss://nos.lol",
+    "wss://relay.damus.io",
+    "wss://nsite.run"
+  ],
+  "servers": [
+    "https://cdn.hzrd149.com",
+    "https://nostr.download",
+    "https://nsite.run"
+  ],
+  "id": "blssmsvrs",
+  "title": "BlossomServers.com",
+  "description": "Small site for publishing and talking about blossom servers"
 }
