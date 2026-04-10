@@ -27,19 +27,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       setPubkey(stored);
-      setIsLoading(false);
-      return;
     }
-
-    getPubkey()
-      .then((pubkey) => {
-        if (pubkey) {
-          setPubkey(pubkey);
-          localStorage.setItem(STORAGE_KEY, pubkey);
-        }
-      })
-      .catch(() => setPubkey(null))
-      .finally(() => setIsLoading(false));
+    setIsLoading(false);
   }, []);
 
   const login = async () => {
