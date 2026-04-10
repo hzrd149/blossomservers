@@ -2,6 +2,7 @@ import { relaySet } from "applesauce-core/helpers";
 
 export const SERVER_ADVERTIZEMENT_KIND = 36363;
 export const SERVER_REVIEW_KIND = 31963;
+export const SERVER_LIST_KIND = 10063;
 export const MOBILE_BREAKPOINT = 950;
 
 // Default relays to connect to
@@ -13,4 +14,4 @@ export const DEFAULT_RELAYS = relaySet([
 ]);
 
 // Default relays to lookup user metadata
-export const DEFAULT_LOOKUP_RELAYS = relaySet(["wss://purplepag.es/", "wss://index.hzrd149.com/"]);
+export const DEFAULT_LOOKUP_RELAYS = relaySet(["wss://purplepag.es/"]);

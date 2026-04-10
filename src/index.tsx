@@ -6,6 +6,7 @@ import "window.nostrdb.js";
 import "./index.css";
 
 import Layout from "./components/layout/layout";
+import { UserProvider } from "./contexts/user-context";
 import { eventStore, factory } from "./nostr.ts";
 import HomeView from "./views/home/index.tsx";
 import ReviewsView from "./views/reviews";
@@ -15,13 +16,15 @@ createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <EventStoreProvider eventStore={eventStore}>
       <FactoryProvider factory={factory}>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<HomeView />} />
-            <Route path="/reviews" element={<ReviewsView />} />
-            <Route path="/server/:server" element={<ServerDetailsView />} />
-          </Routes>
-        </Layout>
+        <UserProvider>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<HomeView />} />
+              <Route path="/reviews" element={<ReviewsView />} />
+              <Route path="/server/:server" element={<ServerDetailsView />} />
+            </Routes>
+          </Layout>
+        </UserProvider>
       </FactoryProvider>
     </EventStoreProvider>
   </BrowserRouter>,

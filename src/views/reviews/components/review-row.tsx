@@ -8,9 +8,10 @@ import getReviewRating from "../../../helpers/review";
 import { Link } from "react-router-dom";
 import UserAvatar from "../../../components/user/user-avatar";
 import UserName from "../../../components/user/user-name";
+import { normalizeServerUrl } from "../../../helpers/server";
 
 export default function ReviewRow({ review }: { review: NostrEvent }) {
-  const url = useMemo(() => new URL(getTagValue(review, "d")!), []);
+  const url = useMemo(() => new URL(normalizeServerUrl(getTagValue(review, "d")!)), []);
   const rating = getReviewRating(review);
 
   return (
