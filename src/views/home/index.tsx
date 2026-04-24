@@ -63,7 +63,7 @@ export default function HomeView() {
     const map = new Map<string, NostrEvent>();
     for (const server of servers || []) {
       const url = getTagValue(server, "d");
-      if (url) {
+      if (url && isValidServerUrl(url)) {
         const normalized = normalizeServerUrl(url);
         map.set(normalized, server);
       }
