@@ -23,8 +23,10 @@ persistEventsToCache(eventStore, async (events) => {
 });
 
 // Load events from cache
-export function cacheRequest(filters: Filter[]): Promise<NostrEvent[]> {
-  return window.nostrdb.filters(filters);
+export async function cacheRequest(filters: Filter[]): Promise<NostrEvent[]> {
+  const result = window.nostrdb.filters(filters);
+  if (Array.isArray(result)) return result;
+  return [];
 }
 
 // Create replaceable loader for addressable events
@@ -46,3 +48,12 @@ const eventLoader = createEventLoader(pool, {
 eventStore.addressableLoader = replaceableLoader;
 eventStore.replaceableLoader = replaceableLoader;
 eventStore.eventLoader = eventLoader;
+
+// Export pubkey getter
+export async function getPubkey(): Promise<string | undefined> {
+  try {
+    return await signer.getPublicKey();
+  } catch {
+    return undefined;
+  }
+}

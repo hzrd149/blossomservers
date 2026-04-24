@@ -20,13 +20,14 @@ import { DEFAULT_RELAYS, SERVER_ADVERTIZEMENT_KIND } from "../const";
 import { pool } from "../nostr";
 import { Checkbox } from "./ui/checkbox";
 import { Textarea } from "./ui/textarea";
+import { normalizeServerUrl } from "@/helpers/server";
 
-export function AddServer() {
+export function AddServer({ initialUrl, buttonLabel }: { initialUrl?: string; buttonLabel?: string } = {}) {
   const [open, setOpen] = useState(false);
   const factory = useEventFactory();
   const form = useForm({
     defaultValues: {
-      domain: "",
+      domain: initialUrl || "",
       name: "",
       description: "",
       paid: false,
@@ -42,7 +43,7 @@ export function AddServer() {
 
   const submit = form.handleSubmit(async (values) => {
     if (!factory) return;
-    const url = new URL("/", values.domain).toString();
+    const url = normalizeServerUrl(initialUrl || values.domain);
 
     const draft = await factory.build(
       { kind: SERVER_ADVERTIZEMENT_KIND, tags: [["d", url]] },
@@ -68,7 +69,7 @@ export function AddServer() {
       }}
     >
       <DialogTrigger asChild>
-        <Button>Add Server</Button>
+        <Button>{buttonLabel || "Add Server"}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
@@ -97,6 +98,7 @@ export function AddServer() {
               className="col-span-3"
               type="url"
               {...form.register("domain", { required: true })}
+              disabled={!!initialUrl}
             />
           </div>
           <div className="flex flex-col gap-2">

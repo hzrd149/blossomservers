@@ -1,11 +1,16 @@
 import iconSrc from "@/assets/icon.png";
 import { HelpDialog } from "../help-dialog";
 import { AddServer } from "../add-server";
+import { Login } from "../login";
 import { Link } from "react-router-dom";
 import useCheckMobile from "../../hooks/use-check-mobile";
+import { useTheme } from "../../hooks/use-theme";
+import { Sun, Moon } from "lucide-react";
+import { Button } from "../ui/button";
 
 export default function Header() {
   const isMobile = useCheckMobile();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <>
@@ -25,7 +30,11 @@ export default function Header() {
 
         {!isMobile && (
           <div className="ms-auto flex gap-2">
+            <Button variant="outline" size="icon" onClick={toggleTheme}>
+              {theme === "dark" ? <Sun size="16" /> : <Moon size="16" />}
+            </Button>
             <HelpDialog />
+            <Login />
             <AddServer />
           </div>
         )}
@@ -33,7 +42,11 @@ export default function Header() {
 
       {isMobile && (
         <div className="flex gap-2 justify-end">
+          <Button variant="outline" size="icon" onClick={toggleTheme}>
+            {theme === "dark" ? <Sun size="16" /> : <Moon size="16" />}
+          </Button>
           <HelpDialog />
+          <Login />
           <AddServer />
         </div>
       )}
