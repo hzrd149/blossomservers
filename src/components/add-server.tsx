@@ -10,17 +10,16 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { includeSingletonTag } from "applesauce-factory/operations";
 import { useEventFactory } from "applesauce-react/hooks";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { setContent } from "applesauce-factory/operations/content";
+import { normalizeServerUrl } from "@/helpers/server";
 import { DEFAULT_RELAYS, SERVER_ADVERTIZEMENT_KIND } from "../const";
 import { pool } from "../nostr";
 import { Checkbox } from "./ui/checkbox";
 import { Textarea } from "./ui/textarea";
-import { normalizeServerUrl } from "@/helpers/server";
+import { includeSingletonTag, setContent } from "applesauce-core/operations";
 
 export function AddServer({ initialUrl, buttonLabel }: { initialUrl?: string; buttonLabel?: string } = {}) {
   const [open, setOpen] = useState(false);

@@ -24,23 +24,20 @@ importers:
         specifier: ^1.2.4
         version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
       applesauce-core:
-        specifier: ^4.4.2
-        version: 4.4.2(typescript@5.9.3)
-      applesauce-factory:
-        specifier: ^4.0.0
-        version: 4.0.0(typescript@5.9.3)
+        specifier: ^5.2.0
+        version: 5.2.0(typescript@5.9.3)
       applesauce-loaders:
-        specifier: ^4.2.0
-        version: 4.2.0(typescript@5.9.3)
+        specifier: ^5.1.0
+        version: 5.1.0(typescript@5.9.3)
       applesauce-react:
-        specifier: ^4.0.0
-        version: 4.0.0(react-dom@18.3.1(react@18.3.1))(typescript@5.9.3)
+        specifier: ^5.1.0
+        version: 5.1.0(@capacitor/core@7.6.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       applesauce-relay:
-        specifier: ^4.4.2
-        version: 4.4.2(typescript@5.9.3)
+        specifier: ^5.2.0
+        version: 5.2.0(typescript@5.9.3)
       applesauce-signers:
-        specifier: ^4.2.0
-        version: 4.2.0(typescript@5.9.3)
+        specifier: ^5.2.0
+        version: 5.2.0(@capacitor/core@7.6.2)(typescript@5.9.3)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -615,8 +612,11 @@ packages:
     resolution: {integrity: sha512-LwdZHpScM4Qz8Xw2iKSzS+cfglZzJGvofQICy7W7v4caru4EaAmyUuO6BGrbyQ2mYV11W0U8j5mBhd14dd3B0A==}
     engines: {node: '>=6.9.0'}
 
-  '@cashu/cashu-ts@2.9.0':
-    resolution: {integrity: sha512-UesYcBkkJAGPbob2I/SX0aht4MQlfxUVPzI+NQqLKSg2l3m0EnmMznvnXZQnDZnhGy0Hd6rkgwAJTVOYcr0v/Q==}
+  '@capacitor/core@7.6.2':
+    resolution: {integrity: sha512-8HRKEUlYpCOeRec8bCHZwEA4o/E2q5dhHSd0v/Cr6+ume08fZY/gniF+ZCKF+6DO0T/nRaBeNRQn6Up+45J1mg==}
+
+  '@cashu/cashu-ts@3.6.4':
+    resolution: {integrity: sha512-a6Asqk+wPEk9a6BQmdLMeegngj0KHKicABUEtr1cUMLTAUYHVHfdfEuHDlU+bNUqXXyaTssG7yo/ZhfHrgbSkQ==}
     engines: {node: '>=22.4.0'}
 
   '@esbuild/aix-ppc64@0.27.7':
@@ -797,23 +797,11 @@ packages:
   '@noble/ciphers@0.5.3':
     resolution: {integrity: sha512-B0+6IIHiqEs3BPMT0hcRmHvEj2QHOLu+uwt+tqDDeVd0oyVzh7BPrDcPjRnV1PV/5LaknXJJQvOuRGR0zQJz+w==}
 
-  '@noble/ciphers@2.1.1':
-    resolution: {integrity: sha512-bysYuiVfhxNJuldNXlFEitTVdNnYUc+XNJZd7Qm2a5j1vZHgY+fazadNFWFaMK/2vye0JVlxV3gHmC0WDfAOQw==}
-    engines: {node: '>= 20.19.0'}
-
   '@noble/curves@1.1.0':
     resolution: {integrity: sha512-091oBExgENk/kGj3AZmtBDMpxQPDtxQABR2B9lb1JbVTs6ytdzZNwvhxQ4MWasRNEzlbEH8jCWFCwhF/Obj5AA==}
 
   '@noble/curves@1.2.0':
     resolution: {integrity: sha512-oYclrNgRaM9SsBUBVbb8M6DTV7ZHRTKugureoYEncY5c65HOmRzvSiTE3y5CYaPYJA/GVkrhXEoF0M3Ya9PMnw==}
-
-  '@noble/curves@1.9.7':
-    resolution: {integrity: sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw==}
-    engines: {node: ^14.21.3 || >=16}
-
-  '@noble/curves@2.0.1':
-    resolution: {integrity: sha512-vs1Az2OOTBiP4q0pwjW5aF0xp9n4MxVrmkFBxc6EKZc6ddYx5gaZiAsZoq0uRRXWbi3AT/sBqn05eRPtn1JCPw==}
-    engines: {node: '>= 20.19.0'}
 
   '@noble/curves@2.2.0':
     resolution: {integrity: sha512-T/BoHgFXirb0ENSPBquzX0rcjXeM6Lo892a2jlYJkqk83LqZx0l1Of7DzlKJ6jkpvMrkHSnAcgb5JegL8SeIkQ==}
@@ -830,10 +818,6 @@ packages:
   '@noble/hashes@1.8.0':
     resolution: {integrity: sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A==}
     engines: {node: ^14.21.3 || >=16}
-
-  '@noble/hashes@2.0.1':
-    resolution: {integrity: sha512-XlOlEbQcE9fmuXxrVTXCTlG2nlRXa9Rj3rr5Ue/+tX+nmkgbX720YHh0VR3hBF9xDvwnb8D2shVGOwNx+ulArw==}
-    engines: {node: '>= 20.19.0'}
 
   '@noble/hashes@2.2.0':
     resolution: {integrity: sha512-IYqDGiTXab6FniAgnSdZwgWbomxpy9FtYvLKs7wCUs2a8RkITG+DFGO1DM9cr+E3/RgADRpFjrKVaJ1z6sjtEg==}
@@ -1293,23 +1277,17 @@ packages:
   '@scure/base@1.2.6':
     resolution: {integrity: sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg==}
 
-  '@scure/base@2.0.0':
-    resolution: {integrity: sha512-3E1kpuZginKkek01ovG8krQ0Z44E3DHPjc5S2rjJw9lZn3KSQOs8S7wqikF/AH7iRanHypj85uGyxk0XAyC37w==}
+  '@scure/base@2.2.0':
+    resolution: {integrity: sha512-b8XEupJibegiXV+tDUseI8oLQc8ei3d/4Jkb2RpbHh3MfE054ov3uIz2dhFkB3FI8iwYkEh0gGCApkrYggkPNg==}
 
   '@scure/bip32@1.3.1':
     resolution: {integrity: sha512-osvveYtyzdEVbt3OfwwXFr4P2iVBL5u1Q3q4ONBfDY/UpOuXmOlbgwc1xECEboY8wIays8Yt6onaWMUdUbfl0A==}
 
-  '@scure/bip32@1.7.0':
-    resolution: {integrity: sha512-E4FFX/N3f4B80AKWp5dP6ow+flD1LQZo/w8UnLGYZO674jS6YnYeepycOOksv+vLPSpgN35wgKgy+ybfTb2SMw==}
-
-  '@scure/bip32@2.0.1':
-    resolution: {integrity: sha512-4Md1NI5BzoVP+bhyJaY3K6yMesEFzNS1sE/cP+9nuvE7p/b0kx9XbpDHHFl8dHtufcbdHRUUQdRqLIPHN/s7yA==}
+  '@scure/bip32@2.2.0':
+    resolution: {integrity: sha512-zFr7t2F+a9+5tB7QbarF2HQNYrgjCNaoLAupZdKkrFMYMozJf5zqH2WJCQibMzm1qQ0QogrxVGO3qXfQDYMaQg==}
 
   '@scure/bip39@1.2.1':
     resolution: {integrity: sha512-Z3/Fsz1yr904dduJD0NpiyRHhRYHdcnyh73FZWiV+/qhWi83wNJ3NWolYqCEN+ZWsUz2TWwajJggcRE9r1zUYg==}
-
-  '@scure/bip39@2.0.1':
-    resolution: {integrity: sha512-PsxdFj/d2AcJcZDX1FXN3dDgitDDTmwf78rKZq1a6c1P1Nan1X/Sxc7667zU3U+AN60g7SxxP0YCVw2H/hBycg==}
 
   '@surma/rollup-plugin-off-main-thread@2.2.3':
     resolution: {integrity: sha512-lR8q/9W7hZpMWweNiAKU7NQerBnzQQLvi8qnTDU/fxItPhtZVMbPV3lbCwjhIlNBe9Bbr5V+KHshvWmVSG9cxQ==}
@@ -1555,41 +1533,34 @@ packages:
   ajv@8.18.0:
     resolution: {integrity: sha512-PlXPeEWMXMZ7sPYOHqmDyCJzcfNrUr3fGNKtezX14ykXOEIvyK81d+qydx89KY5O71FKMPaQ2vBfBFI5NHR63A==}
 
-  applesauce-accounts@4.1.0:
-    resolution: {integrity: sha512-4vRUpkJL8RpVBiboxDb5fUPkeqv+rTIlw3Tog79K1paLHJUcUokcdzzdZLEmS/C531n0AamO2Qvr1XiBFqR5xg==}
+  applesauce-accounts@5.2.0:
+    resolution: {integrity: sha512-iobgIHrlkyWwsOA80t8HDhpNjRVBanby5HqDk5NfxzdDfMQPcJSMehnwTOcNnzeOOARkj+8dlNXbdCWQ7Zyefg==}
 
-  applesauce-actions@4.0.0:
-    resolution: {integrity: sha512-oYAjrazKGDINeVwypNDnV9eNSv7ZDTjNeV3azo5jeUU1haEQ0t+zwVWzGxk9/VutT1yWQHFsCZBInYZIegfLhQ==}
+  applesauce-actions@5.1.1:
+    resolution: {integrity: sha512-nz7N0lFdcaHCAiL26eCFwehU4Z7Gud9LzIuA84NeLnDQHTupcL54xObjJlZPf+hUS6bD0Gp4uBThs/XfKjnwFQ==}
 
-  applesauce-content@4.0.0:
-    resolution: {integrity: sha512-2ZrhM/UCQkcZcAldXJX+KfWAPAtkoTXH5BwPhYpaMw0UgHjWX8mYiy/801PtLBr2gWkKd/Dw1obdNDcPUO3idw==}
+  applesauce-common@5.2.0:
+    resolution: {integrity: sha512-6Natb0szkj65OBKK5LBHIszAmVd8ha9GkCZcavJnZbNeWBgoDTO0hfkgI4pk2L6L/OWNceo2XCajvDAx0AjlgQ==}
 
-  applesauce-core@4.4.2:
-    resolution: {integrity: sha512-zuZB74Pp28UGM4e8DWbN1atR95xL7ODENvjkaGGnvAjIKvfdgMznU7m9gLxr/Hu+IHOmVbbd4YxwNmKBzCWhHQ==}
+  applesauce-content@5.0.0:
+    resolution: {integrity: sha512-k8D+jl6XKUhAgnfDv0loeisCCsW8gGVFqLT4MQQKkQaR77vJM/zJ8O+ulq3lZraWOboTjCRzxVxpniButqW3ZA==}
 
   applesauce-core@5.2.0:
     resolution: {integrity: sha512-aSuM6q6/Gs2FGUqytlHDjKZpSst2xKaT0vMXUQFWUctECNIxvwy6/hTDDInukMuI9mrQdjnO781ZJJgghI7RNw==}
 
-  applesauce-factory@4.0.0:
-    resolution: {integrity: sha512-Sqsg+bC7CkRXMxXLkO6YGoKxy/Aqtia9YenasS5qjPOQFmyFMwKRxaHCu6vX6KdpNSABusw0b9Tnn4gTh6CxLw==}
-
-  applesauce-loaders@4.2.0:
-    resolution: {integrity: sha512-FA5JH3qTcxylciN9SfWPF9DjNyCX6ZLj8iBQo6K+sNQfFBLVqcHjSXDT+whJyJ/T/Obk2yF3HxB2hqFzv8nKzA==}
-
   applesauce-loaders@5.1.0:
     resolution: {integrity: sha512-xllWYl7KxG0oaJqKVdZNzxN8OZQoDMaMmaTAO9Ao1Son+mmJyR9Q4UVicSwSlzzHarf59WCfvJeSdrSHIitkHg==}
 
-  applesauce-react@4.0.0:
-    resolution: {integrity: sha512-eVDUf3GL1j4bsL1Y8GsC/2sywajLu1oJioCNajUsm68hf5+zIR0rLHWaA4y0o5Rcctf/O4UbYkFztj1XHcuHgg==}
-
-  applesauce-relay@4.4.2:
-    resolution: {integrity: sha512-JAmUvIQ0jFrBWHU5SxAFx1xEG9D8xL7aiinSNX05qcULVMcFv1t9llLJivRLNERpbfS4AGYfy2tipYzc/YtyIQ==}
+  applesauce-react@5.1.0:
+    resolution: {integrity: sha512-/ehFFZBPo1MAP850QQH/11HQtt2KvXDZH8MqkgUsgQvav1rE6JQj52bCJlxfKsc2M3ayTr+lJUn5mwHlID01PQ==}
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0
 
   applesauce-relay@5.2.0:
     resolution: {integrity: sha512-ty8PzHenocGdTr3x3It8Ql0rMD9rxB6VGCzGRfL5QF6epdstv2YHKuTyr8QdPBvf7yxfc7oZcMi6djSwNxXqkQ==}
 
-  applesauce-signers@4.2.0:
-    resolution: {integrity: sha512-celexNd+aLt6/vhf72XXw2oAk8ohjna+aWEg/Z2liqPwP+kbVjnqq4Z1RXvt79QQbTIQbXYGWqervXWLE8HmHg==}
+  applesauce-signers@5.2.0:
+    resolution: {integrity: sha512-7tN7lNK2XERdrRchG5z4rdpMqOacFdv7rRhiS+DLTdlbqeSf0wD6Kj8M3vSqq5f2pVS2cl5Z4E/m5RpWC4PSxg==}
 
   aria-hidden@1.2.6:
     resolution: {integrity: sha512-ik3ZgC9dY/lYVVM++OISsaYDeg1tb0VtP5uL3ouh1koGOaUMDPpbFIei4JkFimWUFPn90sbMNMXQAIVOlnYKJA==}
@@ -2329,6 +2300,11 @@ packages:
   nostr-idb@5.0.0:
     resolution: {integrity: sha512-w5y4AnHefZIwCCL11NryfM2xp3U0Ka4qVNQEYAjnQbPwyoV+bZTdwuPXHCdRDWvhOFP2bZr1WBegcsAmkBjrxQ==}
 
+  nostr-signer-capacitor-plugin@0.0.5:
+    resolution: {integrity: sha512-/EvqWz71HZ5cWmzvfXWTm48AWZtbeZDbOg3vLwXyXPjnIp1DR7Wurww/Mo41ORNu1DNPlqH20l7kIXKO6vR5og==}
+    peerDependencies:
+      '@capacitor/core': ^7.0.0
+
   nostr-tools@2.12.0:
     resolution: {integrity: sha512-pUWEb020gTvt1XZvTa8AKNIHWFapjsv2NKyk43Ez2nnvz6WSXsrTFE0XtkNLSRBjPn6EpxumKeNiVzLz74jNSA==}
     peerDependencies:
@@ -2337,24 +2313,8 @@ packages:
       typescript:
         optional: true
 
-  nostr-tools@2.17.4:
-    resolution: {integrity: sha512-LGqpKufnmR93tOjFi4JZv1BTTVIAVfZAaAa+1gMqVfI0wNz2DnCB6UDXmjVTRrjQHMw2ykbk0EZLPzV5UeCIJw==}
-    peerDependencies:
-      typescript: '>=5.0.0'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
   nostr-tools@2.19.4:
     resolution: {integrity: sha512-qVLfoTpZegNYRJo5j+Oi6RPu0AwLP6jcvzcB3ySMnIT5DrAGNXfs5HNBspB/2HiGfH3GY+v6yXkTtcKSBQZwSg==}
-    peerDependencies:
-      typescript: '>=5.0.0'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
-  nostr-tools@2.23.3:
-    resolution: {integrity: sha512-AALyt9k8xPdF4UV2mlLJ2mgCn4kpTB0DZ8t2r6wjdUh6anfx2cTVBsHUlo9U0EY/cKC5wcNyiMAmRJV5OVEalA==}
     peerDependencies:
       typescript: '>=5.0.0'
     peerDependenciesMeta:
@@ -3634,11 +3594,18 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
 
-  '@cashu/cashu-ts@2.9.0':
+  '@capacitor/core@7.6.2':
+    dependencies:
+      tslib: 2.8.1
+    optional: true
+
+  '@cashu/cashu-ts@3.6.4':
     dependencies:
       '@noble/curves': 2.2.0
       '@noble/hashes': 2.2.0
-      '@scure/bip32': 1.7.0
+      '@scure/base': 2.2.0
+      '@scure/bip32': 2.2.0
+    optional: true
 
   '@esbuild/aix-ppc64@0.27.7':
     optional: true
@@ -3744,8 +3711,6 @@ snapshots:
 
   '@noble/ciphers@0.5.3': {}
 
-  '@noble/ciphers@2.1.1': {}
-
   '@noble/curves@1.1.0':
     dependencies:
       '@noble/hashes': 1.3.1
@@ -3754,17 +3719,10 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.3.2
 
-  '@noble/curves@1.9.7':
-    dependencies:
-      '@noble/hashes': 1.8.0
-
-  '@noble/curves@2.0.1':
-    dependencies:
-      '@noble/hashes': 2.0.1
-
   '@noble/curves@2.2.0':
     dependencies:
       '@noble/hashes': 2.2.0
+    optional: true
 
   '@noble/hashes@1.3.1': {}
 
@@ -3772,9 +3730,8 @@ snapshots:
 
   '@noble/hashes@1.8.0': {}
 
-  '@noble/hashes@2.0.1': {}
-
-  '@noble/hashes@2.2.0': {}
+  '@noble/hashes@2.2.0':
+    optional: true
 
   '@noble/secp256k1@1.7.2': {}
 
@@ -4128,9 +4085,11 @@ snapshots:
 
   '@scure/base@1.1.1': {}
 
-  '@scure/base@1.2.6': {}
+  '@scure/base@1.2.6':
+    optional: true
 
-  '@scure/base@2.0.0': {}
+  '@scure/base@2.2.0':
+    optional: true
 
   '@scure/bip32@1.3.1':
     dependencies:
@@ -4138,27 +4097,17 @@ snapshots:
       '@noble/hashes': 1.3.1
       '@scure/base': 1.1.1
 
-  '@scure/bip32@1.7.0':
+  '@scure/bip32@2.2.0':
     dependencies:
-      '@noble/curves': 1.9.7
-      '@noble/hashes': 1.8.0
-      '@scure/base': 1.2.6
-
-  '@scure/bip32@2.0.1':
-    dependencies:
-      '@noble/curves': 2.0.1
-      '@noble/hashes': 2.0.1
-      '@scure/base': 2.0.0
+      '@noble/curves': 2.2.0
+      '@noble/hashes': 2.2.0
+      '@scure/base': 2.2.0
+    optional: true
 
   '@scure/bip39@1.2.1':
     dependencies:
       '@noble/hashes': 1.3.1
       '@scure/base': 1.1.1
-
-  '@scure/bip39@2.0.1':
-    dependencies:
-      '@noble/hashes': 2.0.1
-      '@scure/base': 2.0.0
 
   '@surma/rollup-plugin-off-main-thread@2.2.3':
     dependencies:
@@ -4298,6 +4247,7 @@ snapshots:
   '@types/debug@4.1.13':
     dependencies:
       '@types/ms': 2.1.0
+    optional: true
 
   '@types/estree@0.0.39': {}
 
@@ -4306,14 +4256,17 @@ snapshots:
   '@types/hast@3.0.4':
     dependencies:
       '@types/unist': 3.0.3
+    optional: true
 
   '@types/lodash@4.17.24': {}
 
   '@types/mdast@4.0.4':
     dependencies:
       '@types/unist': 3.0.3
+    optional: true
 
-  '@types/ms@2.1.0': {}
+  '@types/ms@2.1.0':
+    optional: true
 
   '@types/node@22.19.17':
     dependencies:
@@ -4342,7 +4295,8 @@ snapshots:
 
   '@types/trusted-types@2.0.7': {}
 
-  '@types/unist@3.0.3': {}
+  '@types/unist@3.0.3':
+    optional: true
 
   '@vitejs/plugin-react-swc@4.3.0(vite@7.3.2(@types/node@22.19.17)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.46.2)(yaml@2.7.0))':
     dependencies:
@@ -4361,37 +4315,51 @@ snapshots:
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
-  applesauce-accounts@4.1.0(typescript@5.9.3):
+  applesauce-accounts@5.2.0(@capacitor/core@7.6.2)(typescript@5.9.3):
     dependencies:
-      '@noble/hashes': 1.8.0
-      applesauce-core: 4.4.2(typescript@5.9.3)
-      applesauce-signers: 4.2.0(typescript@5.9.3)
+      applesauce-core: 5.2.0(typescript@5.9.3)
+      applesauce-signers: 5.2.0(@capacitor/core@7.6.2)(typescript@5.9.3)
       nanoid: 5.1.9
-      nostr-tools: 2.17.4(typescript@5.9.3)
+      rxjs: 7.8.2
+    optionalDependencies:
+      nostr-signer-capacitor-plugin: 0.0.5(@capacitor/core@7.6.2)
+    transitivePeerDependencies:
+      - '@capacitor/core'
+      - supports-color
+      - typescript
+    optional: true
+
+  applesauce-actions@5.1.1(typescript@5.9.3):
+    dependencies:
+      applesauce-common: 5.2.0(typescript@5.9.3)
+      applesauce-core: 5.2.0(typescript@5.9.3)
       rxjs: 7.8.2
     transitivePeerDependencies:
       - supports-color
       - typescript
+    optional: true
 
-  applesauce-actions@4.0.0(typescript@5.9.3):
+  applesauce-common@5.2.0(typescript@5.9.3):
     dependencies:
-      applesauce-core: 4.4.2(typescript@5.9.3)
-      applesauce-factory: 4.0.0(typescript@5.9.3)
-      nostr-tools: 2.17.4(typescript@5.9.3)
+      '@scure/base': 1.2.6
+      applesauce-core: 5.2.0(typescript@5.9.3)
+      hash-sum: 2.0.0
+      light-bolt11-decoder: 3.2.0
       rxjs: 7.8.2
     transitivePeerDependencies:
       - supports-color
       - typescript
+    optional: true
 
-  applesauce-content@4.0.0(typescript@5.9.3):
+  applesauce-content@5.0.0(typescript@5.9.3):
     dependencies:
-      '@cashu/cashu-ts': 2.9.0
+      '@cashu/cashu-ts': 3.6.4
       '@types/hast': 3.0.4
       '@types/mdast': 4.0.4
       '@types/unist': 3.0.3
-      applesauce-core: 4.4.2(typescript@5.9.3)
+      applesauce-common: 5.2.0(typescript@5.9.3)
+      applesauce-core: 5.2.0(typescript@5.9.3)
       mdast-util-find-and-replace: 3.0.2
-      nostr-tools: 2.17.4(typescript@5.9.3)
       remark: 15.0.1
       remark-parse: 11.0.0
       unified: 11.0.5
@@ -4399,21 +4367,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
       - typescript
-
-  applesauce-core@4.4.2(typescript@5.9.3):
-    dependencies:
-      '@noble/hashes': 1.8.0
-      '@scure/base': 1.2.6
-      debug: 4.4.3
-      fast-deep-equal: 3.1.3
-      hash-sum: 2.0.0
-      light-bolt11-decoder: 3.2.0
-      nanoid: 5.1.9
-      nostr-tools: 2.17.4(typescript@5.9.3)
-      rxjs: 7.8.2
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
+    optional: true
 
   applesauce-core@5.2.0(typescript@5.9.3):
     dependencies:
@@ -4422,26 +4376,6 @@ snapshots:
       hash-sum: 2.0.0
       nanoid: 5.1.9
       nostr-tools: 2.19.4(typescript@5.9.3)
-      rxjs: 7.8.2
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
-
-  applesauce-factory@4.0.0(typescript@5.9.3):
-    dependencies:
-      applesauce-content: 4.0.0(typescript@5.9.3)
-      applesauce-core: 4.4.2(typescript@5.9.3)
-      nanoid: 5.1.9
-      nostr-tools: 2.23.3(typescript@5.9.3)
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
-
-  applesauce-loaders@4.2.0(typescript@5.9.3):
-    dependencies:
-      applesauce-core: 4.4.2(typescript@5.9.3)
-      nanoid: 5.1.9
-      nostr-tools: 2.17.4(typescript@5.9.3)
       rxjs: 7.8.2
     transitivePeerDependencies:
       - supports-color
@@ -4456,31 +4390,20 @@ snapshots:
       - supports-color
       - typescript
 
-  applesauce-react@4.0.0(react-dom@18.3.1(react@18.3.1))(typescript@5.9.3):
+  applesauce-react@5.1.0(@capacitor/core@7.6.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3):
     dependencies:
-      applesauce-accounts: 4.1.0(typescript@5.9.3)
-      applesauce-actions: 4.0.0(typescript@5.9.3)
-      applesauce-content: 4.0.0(typescript@5.9.3)
-      applesauce-core: 4.4.2(typescript@5.9.3)
-      applesauce-factory: 4.0.0(typescript@5.9.3)
       hash-sum: 2.0.0
-      nostr-tools: 2.17.4(typescript@5.9.3)
       observable-hooks: 4.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rxjs@7.8.2)
       react: 18.3.1
       rxjs: 7.8.2
+    optionalDependencies:
+      applesauce-accounts: 5.2.0(@capacitor/core@7.6.2)(typescript@5.9.3)
+      applesauce-actions: 5.1.1(typescript@5.9.3)
+      applesauce-content: 5.0.0(typescript@5.9.3)
+      applesauce-core: 5.2.0(typescript@5.9.3)
     transitivePeerDependencies:
+      - '@capacitor/core'
       - react-dom
-      - supports-color
-      - typescript
-
-  applesauce-relay@4.4.2(typescript@5.9.3):
-    dependencies:
-      '@noble/hashes': 1.8.0
-      applesauce-core: 4.4.2(typescript@5.9.3)
-      nanoid: 5.1.9
-      nostr-tools: 2.17.4(typescript@5.9.3)
-      rxjs: 7.8.2
-    transitivePeerDependencies:
       - supports-color
       - typescript
 
@@ -4495,17 +4418,17 @@ snapshots:
       - supports-color
       - typescript
 
-  applesauce-signers@4.2.0(typescript@5.9.3):
+  applesauce-signers@5.2.0(@capacitor/core@7.6.2)(typescript@5.9.3):
     dependencies:
-      '@noble/hashes': 1.8.0
       '@noble/secp256k1': 1.7.2
-      '@scure/base': 1.2.6
-      applesauce-core: 4.4.2(typescript@5.9.3)
+      applesauce-core: 5.2.0(typescript@5.9.3)
       debug: 4.4.3
       nanoid: 5.1.9
-      nostr-tools: 2.17.4(typescript@5.9.3)
       rxjs: 7.8.2
+    optionalDependencies:
+      nostr-signer-capacitor-plugin: 0.0.5(@capacitor/core@7.6.2)
     transitivePeerDependencies:
+      - '@capacitor/core'
       - supports-color
       - typescript
 
@@ -4571,7 +4494,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  bail@2.0.2: {}
+  bail@2.0.2:
+    optional: true
 
   balanced-match@1.0.2: {}
 
@@ -4615,7 +4539,8 @@ snapshots:
 
   caniuse-lite@1.0.30001790: {}
 
-  character-entities@2.0.2: {}
+  character-entities@2.0.2:
+    optional: true
 
   class-variance-authority@0.7.1:
     dependencies:
@@ -4668,6 +4593,7 @@ snapshots:
   decode-named-character-reference@1.3.0:
     dependencies:
       character-entities: 2.0.2
+    optional: true
 
   deepmerge@4.3.1: {}
 
@@ -4683,7 +4609,8 @@ snapshots:
       has-property-descriptors: 1.0.2
       object-keys: 1.1.1
 
-  dequal@2.0.3: {}
+  dequal@2.0.3:
+    optional: true
 
   detect-libc@2.1.2: {}
 
@@ -4692,6 +4619,7 @@ snapshots:
   devlop@1.1.0:
     dependencies:
       dequal: 2.0.3
+    optional: true
 
   dunder-proto@1.0.1:
     dependencies:
@@ -4819,7 +4747,8 @@ snapshots:
 
   escalade@3.2.0: {}
 
-  escape-string-regexp@5.0.0: {}
+  escape-string-regexp@5.0.0:
+    optional: true
 
   estree-walker@1.0.1: {}
 
@@ -4827,7 +4756,8 @@ snapshots:
 
   esutils@2.0.3: {}
 
-  extend@3.0.2: {}
+  extend@3.0.2:
+    optional: true
 
   fast-deep-equal@3.1.3: {}
 
@@ -5028,7 +4958,8 @@ snapshots:
 
   is-obj@1.0.1: {}
 
-  is-plain-obj@4.1.0: {}
+  is-plain-obj@4.1.0:
+    optional: true
 
   is-regex@1.2.1:
     dependencies:
@@ -5104,6 +5035,7 @@ snapshots:
   light-bolt11-decoder@3.2.0:
     dependencies:
       '@scure/base': 1.1.1
+    optional: true
 
   lightningcss-android-arm64@1.32.0:
     optional: true
@@ -5160,7 +5092,8 @@ snapshots:
 
   lodash@4.18.1: {}
 
-  longest-streak@3.1.0: {}
+  longest-streak@3.1.0:
+    optional: true
 
   loose-envify@1.4.0:
     dependencies:
@@ -5190,6 +5123,7 @@ snapshots:
       escape-string-regexp: 5.0.0
       unist-util-is: 6.0.1
       unist-util-visit-parents: 6.0.2
+    optional: true
 
   mdast-util-from-markdown@2.0.3:
     dependencies:
@@ -5207,11 +5141,13 @@ snapshots:
       unist-util-stringify-position: 4.0.0
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   mdast-util-phrasing@4.1.0:
     dependencies:
       '@types/mdast': 4.0.4
       unist-util-is: 6.0.1
+    optional: true
 
   mdast-util-to-markdown@2.1.2:
     dependencies:
@@ -5224,10 +5160,12 @@ snapshots:
       micromark-util-decode-string: 2.0.1
       unist-util-visit: 5.1.0
       zwitch: 2.0.4
+    optional: true
 
   mdast-util-to-string@4.0.0:
     dependencies:
       '@types/mdast': 4.0.4
+    optional: true
 
   micromark-core-commonmark@2.0.3:
     dependencies:
@@ -5247,12 +5185,14 @@ snapshots:
       micromark-util-subtokenize: 2.1.0
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-factory-destination@2.0.1:
     dependencies:
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-factory-label@2.0.1:
     dependencies:
@@ -5260,11 +5200,13 @@ snapshots:
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-factory-space@2.0.1:
     dependencies:
       micromark-util-character: 2.1.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-factory-title@2.0.1:
     dependencies:
@@ -5272,6 +5214,7 @@ snapshots:
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-factory-whitespace@2.0.1:
     dependencies:
@@ -5279,30 +5222,36 @@ snapshots:
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-util-character@2.1.1:
     dependencies:
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-util-chunked@2.0.1:
     dependencies:
       micromark-util-symbol: 2.0.1
+    optional: true
 
   micromark-util-classify-character@2.0.1:
     dependencies:
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-util-combine-extensions@2.0.1:
     dependencies:
       micromark-util-chunked: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-util-decode-numeric-character-reference@2.0.2:
     dependencies:
       micromark-util-symbol: 2.0.1
+    optional: true
 
   micromark-util-decode-string@2.0.1:
     dependencies:
@@ -5310,24 +5259,30 @@ snapshots:
       micromark-util-character: 2.1.1
       micromark-util-decode-numeric-character-reference: 2.0.2
       micromark-util-symbol: 2.0.1
+    optional: true
 
-  micromark-util-encode@2.0.1: {}
+  micromark-util-encode@2.0.1:
+    optional: true
 
-  micromark-util-html-tag-name@2.0.1: {}
+  micromark-util-html-tag-name@2.0.1:
+    optional: true
 
   micromark-util-normalize-identifier@2.0.1:
     dependencies:
       micromark-util-symbol: 2.0.1
+    optional: true
 
   micromark-util-resolve-all@2.0.1:
     dependencies:
       micromark-util-types: 2.0.2
+    optional: true
 
   micromark-util-sanitize-uri@2.0.1:
     dependencies:
       micromark-util-character: 2.1.1
       micromark-util-encode: 2.0.1
       micromark-util-symbol: 2.0.1
+    optional: true
 
   micromark-util-subtokenize@2.1.0:
     dependencies:
@@ -5335,10 +5290,13 @@ snapshots:
       micromark-util-chunked: 2.0.1
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+    optional: true
 
-  micromark-util-symbol@2.0.1: {}
+  micromark-util-symbol@2.0.1:
+    optional: true
 
-  micromark-util-types@2.0.2: {}
+  micromark-util-types@2.0.2:
+    optional: true
 
   micromark@4.0.2:
     dependencies:
@@ -5361,6 +5319,7 @@ snapshots:
       micromark-util-types: 2.0.2
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   minimatch@3.1.5:
     dependencies:
@@ -5385,6 +5344,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  nostr-signer-capacitor-plugin@0.0.5(@capacitor/core@7.6.2):
+    dependencies:
+      '@capacitor/core': 7.6.2
+    optional: true
+
   nostr-tools@2.12.0(typescript@5.9.3):
     dependencies:
       '@noble/ciphers': 0.5.3
@@ -5397,18 +5361,6 @@ snapshots:
       nostr-wasm: 0.1.0
       typescript: 5.9.3
 
-  nostr-tools@2.17.4(typescript@5.9.3):
-    dependencies:
-      '@noble/ciphers': 0.5.3
-      '@noble/curves': 1.2.0
-      '@noble/hashes': 1.3.1
-      '@scure/base': 1.1.1
-      '@scure/bip32': 1.3.1
-      '@scure/bip39': 1.2.1
-      nostr-wasm: 0.1.0
-    optionalDependencies:
-      typescript: 5.9.3
-
   nostr-tools@2.19.4(typescript@5.9.3):
     dependencies:
       '@noble/ciphers': 0.5.3
@@ -5417,18 +5369,6 @@ snapshots:
       '@scure/base': 1.1.1
       '@scure/bip32': 1.3.1
       '@scure/bip39': 1.2.1
-      nostr-wasm: 0.1.0
-    optionalDependencies:
-      typescript: 5.9.3
-
-  nostr-tools@2.23.3(typescript@5.9.3):
-    dependencies:
-      '@noble/ciphers': 2.1.1
-      '@noble/curves': 2.0.1
-      '@noble/hashes': 2.0.1
-      '@scure/base': 2.0.0
-      '@scure/bip32': 2.0.1
-      '@scure/bip39': 2.0.1
       nostr-wasm: 0.1.0
     optionalDependencies:
       typescript: 5.9.3
@@ -5607,12 +5547,14 @@ snapshots:
       unified: 11.0.5
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   remark-stringify@11.0.0:
     dependencies:
       '@types/mdast': 4.0.4
       mdast-util-to-markdown: 2.1.2
       unified: 11.0.5
+    optional: true
 
   remark@15.0.1:
     dependencies:
@@ -5622,6 +5564,7 @@ snapshots:
       unified: 11.0.5
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   require-from-string@2.0.2: {}
 
@@ -5860,7 +5803,8 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  trough@2.2.0: {}
+  trough@2.2.0:
+    optional: true
 
   tslib@2.8.1: {}
 
@@ -5930,6 +5874,7 @@ snapshots:
       is-plain-obj: 4.1.0
       trough: 2.2.0
       vfile: 6.0.3
+    optional: true
 
   unique-string@2.0.0:
     dependencies:
@@ -5938,21 +5883,25 @@ snapshots:
   unist-util-is@6.0.1:
     dependencies:
       '@types/unist': 3.0.3
+    optional: true
 
   unist-util-stringify-position@4.0.0:
     dependencies:
       '@types/unist': 3.0.3
+    optional: true
 
   unist-util-visit-parents@6.0.2:
     dependencies:
       '@types/unist': 3.0.3
       unist-util-is: 6.0.1
+    optional: true
 
   unist-util-visit@5.1.0:
     dependencies:
       '@types/unist': 3.0.3
       unist-util-is: 6.0.1
       unist-util-visit-parents: 6.0.2
+    optional: true
 
   universalify@2.0.1: {}
 
@@ -5987,11 +5936,13 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
       unist-util-stringify-position: 4.0.0
+    optional: true
 
   vfile@6.0.3:
     dependencies:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
+    optional: true
 
   vite-plugin-pwa@1.2.0(vite@7.3.2(@types/node@22.19.17)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.46.2)(yaml@2.7.0))(workbox-build@7.3.0)(workbox-window@7.3.0):
     dependencies:
@@ -6206,4 +6157,5 @@ snapshots:
   yaml@2.7.0:
     optional: true
 
-  zwitch@2.0.4: {}
+  zwitch@2.0.4:
+    optional: true

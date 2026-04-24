@@ -13,14 +13,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Content, includeSingletonTag } from "applesauce-factory/operations";
+import { includeSingletonTag, setContent } from "applesauce-core/operations";
 import { useEventFactory } from "applesauce-react/hooks";
 
+import { useUser } from "@/contexts/user-context";
 import { DEFAULT_RELAYS, SERVER_REVIEW_KIND } from "../const";
 import { eventStore, pool } from "../nostr";
 import { StarRating } from "./star-rating";
 import { Textarea } from "./ui/textarea";
-import { useUser } from "@/contexts/user-context";
 
 const EVENT_DELETION_KIND = 5;
 
@@ -57,7 +57,7 @@ export function AddReview({ server, review, onDelete }: { server: URL; review?: 
 
     const draft = await factory.build(
       { kind: SERVER_REVIEW_KIND, tags },
-      Content.setContent(values.content),
+      setContent(values.content),
       includeSingletonTag(["rating", (values.rating / 5).toFixed(2)]),
     );
 
@@ -79,7 +79,7 @@ export function AddReview({ server, review, onDelete }: { server: URL; review?: 
           ["a", `${SERVER_REVIEW_KIND}:${review.pubkey}:${server.toString()}`],
         ],
       },
-      Content.setContent(`Deleted review for ${server.host}`),
+      setContent(`Deleted review for ${server.host}`),
     );
 
     const event = await factory.sign(draft);

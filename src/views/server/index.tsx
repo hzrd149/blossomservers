@@ -1,22 +1,23 @@
 import { getEventUID, getTagValue, NostrEvent } from "applesauce-core/helpers";
 import { TimelineModel } from "applesauce-core/models";
-import { useEventModel, useObservableState } from "applesauce-react/hooks";
+import { use$, useEventModel } from "applesauce-react/hooks";
 import { ExternalLink } from "lucide-react";
+import { useEffect } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
 import { AddReview } from "@/components/add-review";
 import { AddServer } from "@/components/add-server";
-import { EditServer } from "@/components/edit-server";
 import CopyButton from "@/components/copy-button";
+import { EditServer } from "@/components/edit-server";
 import Header from "@/components/layout/header";
 import { ServerFavicon } from "@/components/server-favicon";
 import { Button } from "@/components/ui/button";
 import UserAvatar from "@/components/user/user-avatar";
 import UserName from "@/components/user/user-name";
-import { useUser } from "@/contexts/user-context";
 import { DEFAULT_RELAYS, SERVER_ADVERTIZEMENT_KIND, SERVER_REVIEW_KIND } from "@/const";
+import { useUser } from "@/contexts/user-context";
 import { isServerPaid, isServerWhitelist, normalizeServerUrl } from "../../helpers/server";
-import { eventStore, pool } from "../../nostr";
+import { cacheRequest, eventStore, pool } from "../../nostr";
 import Review from "./components/review";
 
 function ServerDetailsPage({ url, server, isPlaceholder }: { url: URL; server: NostrEvent; isPlaceholder?: boolean }) {
@@ -120,17 +121,28 @@ export default function ServerDetailsView() {
     normalizeServerUrl(params.server.startsWith("http") ? params.server : `https://${params.server}`),
   );
 
-  // load events
-  useObservableState(() =>
-    pool.subscription(
-      DEFAULT_RELAYS,
-      {
-        "#d": [url.toString()],
-        kinds: [SERVER_ADVERTIZEMENT_KIND, SERVER_REVIEW_KIND],
-      },
-      { eventStore },
-    ),
+  // Start the subscription
+  use$(
+    () =>
+      pool.subscription(
+        DEFAULT_RELAYS,
+        {
+          "#d": [url.toString()],
+          kinds: [SERVER_ADVERTIZEMENT_KIND, SERVER_REVIEW_KIND],
+        },
+        { eventStore },
+      ),
+    [],
   );
+
+  // Load events from cache
+  useEffect(() => {
+    cacheRequest([{ "#d": [url.toString()], kinds: [SERVER_ADVERTIZEMENT_KIND, SERVER_REVIEW_KIND] }]).then(
+      (events) => {
+        for (const event of events) eventStore.add(event);
+      },
+    );
+  }, []);
 
   // TODO: handle multiple server events
   const server = useEventModel(TimelineModel, [{ "#d": [url.toString()], kinds: [SERVER_ADVERTIZEMENT_KIND] }])?.[0];

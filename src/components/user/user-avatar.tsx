@@ -1,11 +1,11 @@
 import { getDisplayName, getProfilePicture } from "applesauce-core/helpers";
-import { useObservableMemo } from "applesauce-react/hooks";
+import { use$ } from "applesauce-react/hooks";
 
 import { eventStore } from "../../nostr";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function UserAvatar({ pubkey }: { pubkey: string }) {
-  const profile = useObservableMemo(() => eventStore.profile(pubkey), [pubkey]);
+  const profile = use$(() => eventStore.profile(pubkey), [pubkey]);
   const name = getDisplayName(profile);
 
   return (

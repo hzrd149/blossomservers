@@ -7,7 +7,7 @@ import "./index.css";
 
 import Layout from "./components/layout/layout";
 import { UserProvider } from "./contexts/user-context";
-import { eventStore, factory } from "./nostr.ts";
+import { eventStore, eventFactory } from "./nostr.ts";
 import HomeView from "./views/home/index.tsx";
 import ReviewsView from "./views/reviews";
 import ServerDetailsView from "./views/server/index.tsx";
@@ -15,7 +15,7 @@ import ServerDetailsView from "./views/server/index.tsx";
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <EventStoreProvider eventStore={eventStore}>
-      <FactoryProvider factory={factory}>
+      <FactoryProvider factory={eventFactory}>
         <UserProvider>
           <Layout>
             <Routes>

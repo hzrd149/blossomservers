@@ -1,6 +1,6 @@
 import { getTagValue, NostrEvent } from "applesauce-core/helpers";
 import { TimelineModel } from "applesauce-core/models";
-import { useEventModel, useObservableState } from "applesauce-react/hooks";
+import { useEventModel, use$ } from "applesauce-react/hooks";
 import { useEffect, useMemo } from "react";
 
 import Header from "@/components/layout/header";
@@ -11,26 +11,19 @@ import ServersTable from "../../components/servers-table";
 import { cacheRequest, eventStore, pool } from "../../nostr";
 
 export default function HomeView() {
-  useObservableState(() => pool.subscription(DEFAULT_RELAYS, { kinds: [SERVER_ADVERTIZEMENT_KIND] }, { eventStore }));
-
-  useObservableState(() => pool.subscription(DEFAULT_RELAYS, { kinds: [SERVER_REVIEW_KIND] }, { eventStore }));
-
-  useObservableState(() => pool.subscription(DEFAULT_RELAYS, { kinds: [SERVER_LIST_KIND] }, { eventStore }));
+  // Start subscriptions
+  use$(() => pool.subscription(DEFAULT_RELAYS, { kinds: [SERVER_ADVERTIZEMENT_KIND] }, { eventStore }), []);
+  use$(() => pool.subscription(DEFAULT_RELAYS, { kinds: [SERVER_REVIEW_KIND] }, { eventStore }), []);
+  use$(() => pool.subscription(DEFAULT_RELAYS, { kinds: [SERVER_LIST_KIND] }, { eventStore }), []);
 
   // Load events from cache
   useEffect(() => {
     cacheRequest([{ kinds: [SERVER_ADVERTIZEMENT_KIND] }]).then((events) => {
       for (const event of events) eventStore.add(event);
     });
-  }, []);
-
-  useEffect(() => {
     cacheRequest([{ kinds: [SERVER_REVIEW_KIND] }]).then((events) => {
       for (const event of events) eventStore.add(event);
     });
-  }, []);
-
-  useEffect(() => {
     cacheRequest([{ kinds: [SERVER_LIST_KIND] }]).then((events) => {
       for (const event of events) eventStore.add(event);
     });

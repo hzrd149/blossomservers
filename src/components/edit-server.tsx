@@ -1,6 +1,4 @@
 import { getTagValue, NostrEvent } from "applesauce-core/helpers";
-import { setContent } from "applesauce-factory/operations/content";
-import { includeSingletonTag } from "applesauce-factory/operations";
 import { useEventFactory } from "applesauce-react/hooks";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -22,6 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { DEFAULT_RELAYS, SERVER_ADVERTIZEMENT_KIND } from "../const";
 import { eventStore, pool } from "../nostr";
 import { normalizeServerUrl } from "@/helpers/server";
+import { includeSingletonTag, setContent } from "applesauce-core/operations";
 
 const EVENT_DELETION_KIND = 5;
 

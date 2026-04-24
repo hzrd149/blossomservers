@@ -1,17 +1,26 @@
 import { getEventUID } from "applesauce-core/helpers";
 import { TimelineModel } from "applesauce-core/models";
-import { useEventModel, useObservableState } from "applesauce-react/hooks";
+import { use$, useEventModel } from "applesauce-react/hooks";
+import { useEffect } from "react";
 
 import Header from "@/components/layout/header";
 import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DEFAULT_RELAYS, SERVER_REVIEW_KIND } from "@/const";
+import { cacheRequest, eventStore, pool } from "../../nostr";
 import ReviewRow from "./components/review-row";
-import { eventStore, pool } from "../../nostr";
 
 export default function ReviewsView() {
   const reviews = useEventModel(TimelineModel, [{ kinds: [SERVER_REVIEW_KIND] }]);
 
-  useObservableState(() => pool.subscription(DEFAULT_RELAYS, { kinds: [SERVER_REVIEW_KIND] }, { eventStore }));
+  // Start the subscription
+  use$(() => pool.subscription(DEFAULT_RELAYS, { kinds: [SERVER_REVIEW_KIND] }, { eventStore }), []);
+
+  // Load events from cache
+  useEffect(() => {
+    cacheRequest([{ kinds: [SERVER_REVIEW_KIND] }]).then((events) => {
+      for (const event of events) eventStore.add(event);
+    });
+  }, []);
 
   return (
     <>
@@ -27,7 +36,11 @@ export default function ReviewsView() {
             <TableHead>Review</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>{reviews?.map((review) => <ReviewRow key={getEventUID(review)} review={review} />)}</TableBody>
+        <TableBody>
+          {reviews?.map((review) => (
+            <ReviewRow key={getEventUID(review)} review={review} />
+          ))}
+        </TableBody>
       </Table>
     </>
   );
