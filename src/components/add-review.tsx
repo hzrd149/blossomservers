@@ -1,8 +1,6 @@
-import { Star } from "lucide-react";
 import { NostrEvent } from "applesauce-core/helpers";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import Rating from "react-rating";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +18,7 @@ import { useEventFactory } from "applesauce-react/hooks";
 
 import { DEFAULT_RELAYS, SERVER_REVIEW_KIND } from "../const";
 import { eventStore, pool } from "../nostr";
+import { StarRating } from "./star-rating";
 import { Textarea } from "./ui/textarea";
 import { useUser } from "@/contexts/user-context";
 
@@ -142,13 +141,10 @@ export function AddReview({ server, review, onDelete }: { server: URL; review?: 
         <form id={review ? "edit-review" : "add-review"} className="grid gap-4" onSubmit={submit}>
           <div className="flex flex-col gap-2">
             <Label htmlFor="domain">Rating {form.getValues("rating")}</Label>
-            {/* @ts-expect-error */}
-            <Rating
-              initialRating={form.getValues("rating")}
-              fullSymbol={<Star fill="currentColor" size="32" />}
-              emptySymbol={<Star size="32" />}
-              start={0}
-              stop={5}
+            <StarRating
+              value={form.getValues("rating")}
+              size="32"
+              readonly={false}
               onChange={(v) => form.setValue("rating", v, { shouldDirty: true, shouldTouch: true })}
             />
           </div>

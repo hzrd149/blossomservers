@@ -3,15 +3,15 @@ import { Link } from "react-router-dom";
 import { getEventUID, getTagValue, NostrEvent } from "applesauce-core/helpers";
 import { TimelineModel } from "applesauce-core/models";
 import { useEventModel } from "applesauce-react/hooks";
-import { SquareArrowOutUpRight, Star } from "lucide-react";
+import { SquareArrowOutUpRight } from "lucide-react";
 
 import { SERVER_REVIEW_KIND } from "@/const";
 import useCheckMobile from "@/hooks/use-check-mobile";
 import { normalizeServerUrl } from "@/helpers/server";
 
-import Rating from "react-rating";
 import { AddReview } from "./add-review";
 import CopyButton from "./copy-button";
+import { StarRating } from "./star-rating";
 import { Button } from "./ui/button";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
 import { isServerPaid, isServerWhitelist } from "../helpers/server";
@@ -212,18 +212,7 @@ function MobileServerRow({ server, serverListCounts }: { server: NostrEvent; ser
 }
 
 function ServerRating({ average, size }: { average: number; size?: number }) {
-  return (
-    /* @ts-expect-error */
-    <Rating
-      initialRating={average * 5}
-      fullSymbol={<Star fill="currentColor" size={size || 18} />}
-      emptySymbol={<Star size={size || 18} />}
-      start={0}
-      stop={5}
-      fractions={5}
-      readonly
-    />
-  );
+  return <StarRating value={average * 5} size={size || 18} fractions={5} />;
 }
 
 function OpenServerButton({ url }: { url: URL | string }) {
