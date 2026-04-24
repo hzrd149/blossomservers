@@ -24,7 +24,7 @@ persistEventsToCache(eventStore, async (events) => {
 
 // Load events from cache
 export async function cacheRequest(filters: Filter[]): Promise<NostrEvent[]> {
-  const result = window.nostrdb.filters(filters);
+  const result = window.nostrdb.query(filters);
   if (Array.isArray(result)) return result;
   return [];
 }

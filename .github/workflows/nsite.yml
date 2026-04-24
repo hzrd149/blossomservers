@@ -18,7 +18,7 @@ jobs:
 
       - uses: pnpm/action-setup@v4
 
-      - name: Setup Node.js 24
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -31,7 +31,7 @@ jobs:
         run: pnpm build
 
       - name: Deploy to nsite
-        uses: sandwichfarm/nsite-action@v0.3.0
+        uses: sandwichfarm/nsite-action@v0.3.1
         with:
           nbunksec: ${{ secrets.NSITE_BUNKER }}
           directory: "./dist"

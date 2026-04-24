@@ -9,6 +9,7 @@ import { AddServer } from "@/components/add-server";
 import { EditServer } from "@/components/edit-server";
 import CopyButton from "@/components/copy-button";
 import Header from "@/components/layout/header";
+import { ServerFavicon } from "@/components/server-favicon";
 import { Button } from "@/components/ui/button";
 import UserAvatar from "@/components/user/user-avatar";
 import UserName from "@/components/user/user-name";
@@ -45,7 +46,10 @@ function ServerDetailsPage({ url, server, isPlaceholder }: { url: URL; server: N
       <div className="flex flex-col gap-4 p-4 border rounded-lg">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            <h2 className="text-3xl font-bold">{names || "Server Not Found"}</h2>
+            <div className="flex items-center gap-3 min-w-0">
+              <ServerFavicon url={url} className="h-8 w-8" />
+              <h2 className="text-3xl font-bold truncate">{names || "Server Not Found"}</h2>
+            </div>
             <div className="flex items-center gap-2 mt-1">
               <span className="text-sm text-muted-foreground select-all">{url.toString()}</span>
               <CopyButton data={url.toString()} variant="ghost" className="h-6 w-6 p-0" />

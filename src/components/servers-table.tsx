@@ -19,6 +19,7 @@ import { Badge } from "./ui/badge";
 import UserAvatar from "./user/user-avatar";
 import UserName from "./user/user-name";
 import { ServerStatusDot } from "./server-status-dot";
+import { ServerFavicon } from "./server-favicon";
 
 function ServersTable({
   servers,
@@ -112,13 +113,12 @@ function DesktopServerRow({
       {/* Name */}
       <TableCell className="font-medium">
         <div className="flex flex-col items-start">
-          <Link
-            to={`/server/${url.host}`}
-            className="hover:underline truncate max-w-64"
-            title={getTagValue(server, "name")}
-          >
-            {getTagValue(server, "name")}
-          </Link>
+          <div className="flex items-center gap-2 max-w-64 min-w-0">
+            <ServerFavicon url={url} />
+            <Link to={`/server/${url.host}`} className="hover:underline truncate" title={getTagValue(server, "name")}>
+              {getTagValue(server, "name")}
+            </Link>
+          </div>
           {paid && <Badge className="mr-2">Paid</Badge>}
           {whitelist && <Badge className="mr-2">Whitelist</Badge>}
         </div>
@@ -172,9 +172,12 @@ function MobileServerRow({ server, serverListCounts }: { server: NostrEvent; ser
     >
       <div className="flex gap-2 mb-2 justify-between items-start">
         <div className="flex-1 min-w-0">
-          <Link to={`/server/${url.host}`} className="hover:underline font-bold text-lg truncate">
-            {getTagValue(server, "name")}
-          </Link>
+          <div className="flex items-center gap-2 min-w-0 max-w-full">
+            <ServerFavicon url={url} />
+            <Link to={`/server/${url.host}`} className="hover:underline font-bold text-lg truncate">
+              {getTagValue(server, "name")}
+            </Link>
+          </div>
           <div className="flex items-center gap-1 text-gray-500">
             <ServerStatusDot url={url.toString()} />
             <span className="truncate">{url.host}</span>
