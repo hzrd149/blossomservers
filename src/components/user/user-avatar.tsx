@@ -1,17 +1,20 @@
-import { getDisplayName, getProfilePicture } from "applesauce-core/helpers";
+import { castUser } from "applesauce-common/casts";
 import { use$ } from "applesauce-react/hooks";
+import { useMemo } from "react";
 
-import { eventStore } from "../../nostr";
+import { cn } from "@/lib/utils";
+import { eventStore } from "@/services/nostr";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-export default function UserAvatar({ pubkey }: { pubkey: string }) {
-  const profile = use$(() => eventStore.profile(pubkey), [pubkey]);
-  const name = getDisplayName(profile);
+export default function UserAvatar({ pubkey, className }: { pubkey: string; className?: string }) {
+  const user = useMemo(() => castUser(pubkey, eventStore), [pubkey]);
+  const profile = use$(user.profile$);
+  const name = profile?.displayName;
 
   return (
-    <Avatar>
-      <AvatarFallback>{name?.slice(0, 1) || "U"}</AvatarFallback>
-      <AvatarImage src={getProfilePicture(profile)} alt={name} />
+    <Avatar className={cn("h-9 w-9", className)}>
+      <AvatarImage src={profile?.picture} alt={name} className="object-cover" />
+      <AvatarFallback className="text-xs">{name?.slice(0, 1).toUpperCase() || pubkey.slice(0, 2)}</AvatarFallback>
     </Avatar>
   );
 }

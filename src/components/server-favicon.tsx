@@ -1,16 +1,17 @@
+import { HardDrive } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-export function ServerFavicon({ url, className }: { url: URL; className?: string }) {
-  const src = useMemo(() => new URL("/favicon.ico", url.origin).toString(), [url.origin]);
-  const [hidden, setHidden] = useState(false);
+export function ServerFavicon({ url, className }: { url: string; className?: string }) {
+  const src = useMemo(() => new URL("/favicon.ico", url).toString(), [url]);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    setHidden(false);
+    setFailed(false);
   }, [src]);
 
-  if (hidden) return null;
+  if (failed) return <HardDrive className={cn("h-5 w-5 shrink-0 text-muted-foreground", className)} aria-hidden="true" />;
 
   return (
     <img
@@ -19,7 +20,7 @@ export function ServerFavicon({ url, className }: { url: URL; className?: string
       aria-hidden="true"
       className={cn("h-5 w-5 shrink-0 rounded-sm object-contain", className)}
       loading="lazy"
-      onError={() => setHidden(true)}
+      onError={() => setFailed(true)}
     />
   );
 }
