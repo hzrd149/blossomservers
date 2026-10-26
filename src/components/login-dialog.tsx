@@ -23,11 +23,12 @@ function useLogin(onDone: () => void) {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const run = async (login: () => Promise<ExtensionAccount | NostrConnectAccount>) => {
+  const run = async (login: () => Promise<ExtensionAccount | NostrConnectAccount>, signal?: AbortSignal) => {
     setError(null);
     setBusy(true);
     try {
       const account = await login();
+      if (signal?.aborted) return;
       // Reuse an existing account for the same pubkey and signer type
       const existing = accounts.getAccountsForPubkey(account.pubkey).find((a) => a.type === account.type);
       if (existing) accounts.replaceAccount(existing, account);
@@ -35,9 +36,9 @@ function useLogin(onDone: () => void) {
       accounts.setActive(account);
       onDone();
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+      if (!signal?.aborted) setError(err instanceof Error ? err.message : String(err));
     } finally {
-      setBusy(false);
+      if (!signal?.aborted) setBusy(false);
     }
   };
 
@@ -94,27 +95,49 @@ function BunkerLogin({ onDone }: { onDone: () => void }) {
 function QRLogin({ onDone }: { onDone: () => void }) {
   const { error, run } = useLogin(onDone);
   const [uri, setUri] = useState<string | null>(null);
+  const [relays, setRelays] = useState(NOSTR_CONNECT_RELAYS);
+  const [relayInput, setRelayInput] = useState("");
+  const [relayError, setRelayError] = useState<string | null>(null);
+
+  const applyRelay = () => {
+    const value = relayInput.trim();
+    let nextRelays = NOSTR_CONNECT_RELAYS;
+    if (value) {
+      try {
+        const url = new URL(value);
+        if (!["ws:", "wss:"].includes(url.protocol) || !url.hostname || url.username || url.password || url.hash)
+          throw new Error("Invalid relay URL");
+        nextRelays = [url.href];
+      } catch {
+        setRelayError("Enter a valid ws:// or wss:// relay URL.");
+        return;
+      }
+    }
+    setRelayError(null);
+    if (nextRelays.join("\n") !== relays.join("\n")) setRelays(nextRelays);
+  };
 
   // Start a nostrconnect:// session and wait for a signer to scan it
   useEffect(() => {
-    const signer = new NostrConnectSigner({ relays: NOSTR_CONNECT_RELAYS });
+    const signer = new NostrConnectSigner({ relays });
     const controller = new AbortController();
     let handedOff = false;
 
     setUri(signer.getNostrConnectURI({ name: "Blossom Servers", url: location.origin }));
     run(async () => {
       await signer.waitForSigner(controller.signal);
-      handedOff = true;
       const pubkey = await signer.getPublicKey();
+      controller.signal.throwIfAborted();
+      handedOff = true;
       return new NostrConnectAccount(pubkey, signer);
-    });
+    }, controller.signal);
 
     return () => {
       controller.abort();
       if (!handedOff) void signer.close();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [relays]);
 
   return (
     <div className="flex flex-col items-center gap-3">
@@ -132,6 +155,41 @@ function QRLogin({ onDone }: { onDone: () => void }) {
           </div>
         </>
       )}
+      <details className="w-full text-sm">
+        <summary className="cursor-pointer text-muted-foreground">Advanced</summary>
+        <form
+          className="mt-3 flex flex-col gap-2"
+          onSubmit={(e) => {
+            e.preventDefault();
+            applyRelay();
+          }}
+        >
+          <label htmlFor="qr-signer-relay" className="font-medium">
+            Signer relay
+          </label>
+          <Input
+            id="qr-signer-relay"
+            value={relayInput}
+            onChange={(e) => setRelayInput(e.target.value)}
+            placeholder="wss://relay.example.com/"
+            autoComplete="off"
+            spellCheck={false}
+            aria-invalid={!!relayError}
+            aria-describedby={relayError ? "qr-relay-help qr-relay-error" : "qr-relay-help"}
+          />
+          <p id="qr-relay-help" className="text-xs text-muted-foreground">
+            Leave blank to use the default relays. Applying a change creates a new QR code; scan it again to connect.
+          </p>
+          {relayError && (
+            <p id="qr-relay-error" role="alert" className="text-sm text-red-500">
+              {relayError}
+            </p>
+          )}
+          <Button type="submit" variant="outline">
+            Apply relay
+          </Button>
+        </form>
+      </details>
       {error && error !== "Aborted" && <p className="text-sm text-red-500">{error}</p>}
     </div>
   );
@@ -153,7 +211,9 @@ export function LoginDialog() {
       <DialogContent className="sm:max-w-[440px]">
         <DialogHeader>
           <DialogTitle>Sign in</DialogTitle>
-          <DialogDescription>Sign in with Nostr to review servers, comment and manage your server list.</DialogDescription>
+          <DialogDescription>
+            Sign in with Nostr to review servers, comment and manage your server list.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="grid grid-cols-3 gap-1 rounded-lg bg-muted p-1">
