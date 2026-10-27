@@ -18,7 +18,6 @@ import {
 
 import {
   COMMENT_KIND,
-  DIRECTORY_RELAYS,
   DELETE_KIND,
   REACTION_KIND,
   SERVER_ADVERTIZEMENT_KIND,
@@ -26,6 +25,7 @@ import {
   SERVER_REVIEW_KIND,
 } from "../const";
 import { eventStore, hydrateFromCache, pool, syncLoader } from "./nostr";
+import { readRelays$ } from "./settings";
 
 /** A layer of the directory that is synced from the default relays */
 export type SyncLayer = { id: string; label: string; filter: Filter };
@@ -71,8 +71,8 @@ export type DirectorySyncState = {
   done: boolean;
 };
 
-function syncLayer(layer: SyncLayer): Observable<LayerState> {
-  return syncLoader({ relays: DIRECTORY_RELAYS, filter: layer.filter }).status$.pipe(
+function syncLayer(layer: SyncLayer, relays: string[]): Observable<LayerState> {
+  return syncLoader({ relays, filter: layer.filter }).status$.pipe(
     map((status): LayerState => ({ layer, status })),
     startWith<LayerState>({ layer }),
     catchError((err) => of<LayerState>({ layer, error: err instanceof Error ? err.message : String(err) })),
@@ -80,10 +80,10 @@ function syncLayer(layer: SyncLayer): Observable<LayerState> {
 }
 
 /** Keep the store up to date with events published after the sync started */
-function liveUpdates(since: number) {
+function liveUpdates(since: number, relays: string[]) {
   return pool
     .subscription(
-      DIRECTORY_RELAYS,
+      relays,
       SYNC_LAYERS.map((layer) => ({ ...layer.filter, since })),
     )
     .pipe(
@@ -103,18 +103,22 @@ export const directorySync$: Observable<DirectorySyncState> = defer(() => {
   return from(hydrateFromCache(SYNC_LAYERS.map((layer) => layer.filter))).pipe(
     // Once the cache is in the store, sync every layer in parallel and listen for new events
     switchMap((cached) =>
-      merge(
-        combineLatest(SYNC_LAYERS.map(syncLayer)).pipe(
-          map((layers): DirectorySyncState => ({
-            cached,
-            hydrated: true,
-            layers,
-            done: layers.every((l) => l.error !== undefined || l.status?.done),
-          })),
+      readRelays$.pipe(
+        switchMap((relays) =>
+          merge(
+            combineLatest(SYNC_LAYERS.map((layer) => syncLayer(layer, relays))).pipe(
+              map((layers): DirectorySyncState => ({
+                cached,
+                hydrated: true,
+                layers,
+                done: layers.every((l) => l.error !== undefined || l.status?.done),
+              })),
+            ),
+            liveUpdates(since, relays),
+          ),
         ),
-        liveUpdates(since),
       ),
     ),
     startWith<DirectorySyncState>({ cached: 0, hydrated: false, layers: [], done: false }),
   );
-}).pipe(shareReplay(1));
+}).pipe(shareReplay({ bufferSize: 1, refCount: true }));

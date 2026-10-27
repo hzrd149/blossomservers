@@ -4,7 +4,7 @@ import { createEventLoaderForStore, createReactionsLoader, createSyncLoader } fr
 import { RelayLiveness, RelayPool } from "applesauce-relay";
 import "window.nostrdb.js";
 
-import { DEFAULT_LOOKUP_RELAYS, DEFAULT_RELAYS } from "../const";
+import { lookupRelays$, readRelays$ } from "./settings";
 
 // Verify synchronously in JS until WASM is ready; initialization failure must never bypass verification.
 let checkSignature: (event: NostrEvent) => boolean = verifyEvent;
@@ -72,12 +72,12 @@ export async function hydrateFromCache(filters: Filter[]) {
 // Lazily load profiles, relay lists and any other missing events
 createEventLoaderForStore(eventStore, pool, {
   cacheRequest,
-  extraRelays: DEFAULT_RELAYS,
-  lookupRelays: DEFAULT_LOOKUP_RELAYS,
+  extraRelays: readRelays$,
+  lookupRelays: lookupRelays$,
 });
 
 // NIP-77 negentropy sync with a paginated REQ fallback for relays that don't support it
 export const syncLoader = createSyncLoader({ eventStore, pool, liveness });
 
 // Batched loader for reactions on a single event
-export const reactionsLoader = createReactionsLoader(pool, { eventStore, cacheRequest, extraRelays: DEFAULT_RELAYS });
+export const reactionsLoader = createReactionsLoader(pool, { eventStore, cacheRequest, extraRelays: readRelays$ });

@@ -1,4 +1,4 @@
-import { Moon, Plus, Sun } from "lucide-react";
+import { Moon, Plus, Sun, Settings } from "lucide-react";
 import { NavLink, Link } from "react-router-dom";
 
 import iconSrc from "@/assets/icon.png";
@@ -53,6 +53,11 @@ export default function Header() {
 
         <div className="ml-auto flex items-center gap-1">
           <SyncStatus />
+          <Button variant="ghost" size="icon" asChild>
+            <Link to="/settings" title="Settings" aria-label="Settings">
+              <Settings size={18} />
+            </Link>
+          </Button>
           <Button variant="ghost" size="icon" onClick={toggleTheme} title="Toggle theme">
             {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
           </Button>

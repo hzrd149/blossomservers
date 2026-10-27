@@ -9,12 +9,15 @@ import { accounts } from "./services/accounts";
 import { eventStore } from "./services/nostr";
 import { actions } from "./services/publish";
 import { directorySync$ } from "./services/sync";
+import { relayPolicy$ } from "./services/relay-policy";
+import SettingsView from "./views/settings";
 import HomeView from "./views/home";
 import ReviewsView from "./views/reviews";
 import ServerView from "./views/server";
 import UserView, { MyServersView } from "./views/user";
 
 function App() {
+  use$(relayPolicy$);
   // Keep the directory synced for the lifetime of the app
   use$(directorySync$);
 
@@ -26,6 +29,7 @@ function App() {
         <Route path="/server/:server" element={<ServerView />} />
         <Route path="/user/:user" element={<UserView />} />
         <Route path="/me" element={<MyServersView />} />
+        <Route path="/settings" element={<SettingsView />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Layout>

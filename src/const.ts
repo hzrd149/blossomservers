@@ -11,7 +11,6 @@ export const DELETE_KIND = 5;
 
 // Default relays to publish to and read from
 export const DEFAULT_RELAYS = relaySet([
-  "wss://nostrue.com/",
   "wss://relay.primal.net/",
   "wss://nos.lol/",
   "wss://relay.damus.io/",

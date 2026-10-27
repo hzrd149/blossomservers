@@ -24,6 +24,12 @@ pnpm dev
 
 Open the local URL printed by Vite. Default relay settings live in `src/const.ts`.
 
+Open **Settings** from the header to customize app relays, lookup relays, and appearance.
+App relays are saved on this device and used for both reading and publishing. When signed in,
+the app also reads from your NIP-65 read relays and publishes to your outboxes.
+Your existing lookup-relay list (kind 10086) takes precedence over local lookup settings;
+saving edits updates that public list only if one already exists. Otherwise, edits stay local.
+
 ### Common commands
 
 ```sh

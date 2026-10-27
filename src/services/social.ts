@@ -12,9 +12,11 @@ import {
   switchMap,
   catchError,
   throttleTime,
+  combineLatest,
 } from "rxjs";
 
-import { DIRECTORY_RELAYS, SERVER_LIST_KIND } from "../const";
+import { SERVER_LIST_KIND } from "../const";
+import { readRelays$ } from "./settings";
 import { accounts } from "./accounts";
 import { eventStore, hydrateFromCache, pool, syncLoader } from "./nostr";
 
@@ -41,8 +43,8 @@ export const socialAuthors$ = accounts.active$.pipe(
 );
 
 /** Account/follow changes cancel the previous network's requests and immediately clear its counts. */
-export const socialLists$ = socialAuthors$.pipe(
-  switchMap((authors) => {
+export const socialLists$ = combineLatest([socialAuthors$, readRelays$]).pipe(
+  switchMap(([authors, relays]) => {
     // An empty authors filter can mean "all authors" to a relay. Never send one.
     if (authors.length === 0) return of<NostrEvent[]>([]);
     const filters: Filter[] = [];
@@ -53,10 +55,10 @@ export const socialLists$ = socialAuthors$.pipe(
     const updates = from(hydrateFromCache(filters)).pipe(
       switchMap(() =>
         merge(
-          ...filters.map((filter) => syncLoader({ relays: DIRECTORY_RELAYS, filter }).status$),
+          ...filters.map((filter) => syncLoader({ relays, filter }).status$),
           pool
             .subscription(
-              DIRECTORY_RELAYS,
+              relays,
               filters.map((filter) => ({ ...filter, since })),
             )
             .pipe(mapEventsToStore(eventStore)),
