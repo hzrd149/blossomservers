@@ -7,7 +7,7 @@ A community directory for discovering and reviewing public [Blossom](https://git
 Browse servers and reviews without an account. Sign in with a Nostr browser extension, bunker URL, or QR-code signer to write reviews, comment, and manage your server list.
 
 Server details are attributed community reports, not proof of operator ownership. See the
-[experimental capability report protocol](docs/server-reports.md) for event shape, browser checks and compatibility.
+[experimental capability report protocol](NIP.md) for event format, validation, queries, browser checks, and compatibility with other apps.
 
 ## Development
 
