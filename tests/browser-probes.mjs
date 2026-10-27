@@ -100,17 +100,47 @@ try {
           import { MemoryRouter } from 'react-router-dom';
           import { ExtensionAccount } from 'applesauce-accounts/accounts';
           import { ExtensionSigner } from 'applesauce-signers';
-          import { ReportDialog } from '/src/components/report-dialog';
+           import { ReportDialog } from '/src/components/report-dialog';
+           import { ServerReports } from '/src/components/server-reports';
+           import { ServerBadges } from '/src/components/server-badges';
+           import { serverSummary$ } from '/src/models/directory';
+           import { use$ } from 'applesauce-react/hooks';
           import { accounts } from '/src/services/accounts';
-          import { eventStore } from '/src/services/nostr';
+           import { eventStore, pool } from '/src/services/nostr';
+           import { PrivateKeySigner } from 'applesauce-signers';
           import '/src/index.css';
           eventStore.eventLoader = undefined;
-          window.nostr = { getPublicKey: async () => 'a'.repeat(64), signEvent: async () => { throw new Error('No signing in UI fixture'); } };
-          const account = new ExtensionAccount('a'.repeat(64), new ExtensionSigner());
-          accounts.addAccount(account);
-          accounts.setActive(account);
-          createRoot(document.getElementById('root')).render(
-            <MemoryRouter><ReportDialog url="https://readable.example.com:${fixturePort}/"><button>Open report</button></ReportDialog></MemoryRouter>
+           const signer = new PrivateKeySigner(new Uint8Array(32).fill(17));
+           const pubkey = await signer.getPublicKey();
+           window.nostr = { getPublicKey: async () => pubkey, signEvent: event => signer.signEvent(event) };
+           pool.publish = async (_targets, event) => {
+             if (window.echoPublish) {
+               eventStore.add(event);
+               await new Promise(resolve => window.finishPublish = resolve);
+             }
+             return [{ ok: !window.rejectPublish, message: 'Fixture rejection' }];
+           };
+           const account = new ExtensionAccount(pubkey, new ExtensionSigner());
+           accounts.addAccount(account);
+           accounts.setActive(account);
+           function Reports() {
+             const server = use$(() => serverSummary$('https://readable.example.com:${fixturePort}/'), []);
+             return server ? <ServerReports server={server} /> : null;
+           }
+           const now = Math.floor(Date.now() / 1000);
+           const badgeReports = [
+             { pubkey: 'a', capability: 'upload', value: true, at: now, basis: 'manual' },
+             { pubkey: 'b', capability: 'upload', value: false, at: now, basis: 'manual' },
+             { pubkey: 'c', capability: 'mirror', value: false, at: now, basis: 'manual' },
+             { pubkey: 'd', capability: 'media', value: true, at: now - 91 * 86400, basis: 'manual' },
+             { pubkey: 'e', capability: 'upload-preflight-accepted', value: true, at: now, basis: 'observed' },
+             { pubkey: 'f', capability: 'upload-auth', value: true, at: now, basis: 'manual' },
+             { pubkey: 'g', capability: 'upload-payment', value: false, at: now, basis: 'manual' },
+             { pubkey: 'h', capability: 'upload-payment', value: true, at: now, basis: 'manual' },
+             { pubkey: 'i', capability: 'restricted-uploads', value: false, at: now, basis: 'manual' },
+           ].map(assertion => ({ event: { pubkey: assertion.pubkey }, assertions: [assertion] }));
+           createRoot(document.getElementById('root')).render(
+             <MemoryRouter><ReportDialog url="https://readable.example.com:${fixturePort}/"><button>Open report</button></ReportDialog><Reports /><div data-testid="feature-badges"><ServerBadges server={{ reports: badgeReports }} /></div></MemoryRouter>
           );
         `;
         },
@@ -232,7 +262,22 @@ try {
         for (let i = 0; i < 200; i++) { if (predicate()) return; await new Promise(resolve => setTimeout(resolve, 50)); }
         throw new Error('UI fixture condition timed out: ' + document.body.innerText);
       };
-      await wait(() => [...document.querySelectorAll('button')].some(button => button.textContent === 'Open report'));
+       await wait(() => [...document.querySelectorAll('button')].some(button => button.textContent === 'Open report'));
+       const badges = document.querySelector('[data-testid="feature-badges"]');
+       const labels = [...badges.querySelectorAll('[aria-label]')].map(badge => badge.getAttribute('aria-label'));
+       if (!labels.some(label => label.includes('Uploads: 1 reported yes, 1 reported no') && label.includes('disagree')))
+         throw new Error('Missing mixed report counts');
+       if (!labels.some(label => label.includes('Mirroring: 0 reported yes, 1 reported no')))
+         throw new Error('Missing negative feature state');
+       if (!labels.some(label => label.includes('Media: older reports only')))
+         throw new Error('Missing older-report state');
+       if (badges.innerText.includes('preflight'))
+         throw new Error('Technical assertions should not become feature badges');
+       for (const label of ['Auth required', 'Free uploads', 'Paid uploads', 'Public uploads', 'No uploads', 'No mirroring']) {
+         if (!badges.innerText.includes(label)) throw new Error('Missing descriptive feature label: ' + label);
+       }
+       if (badges.querySelector('[class*="emerald"], [class*="rose"], .lucide-check, .lucide-x'))
+         throw new Error('Policy badges must not imply working or broken');
       [...document.querySelectorAll('button')].find(button => button.textContent === 'Open report').click();
       await wait(() => document.querySelector('[role="dialog"]'));
       const dialog = document.querySelector('[role="dialog"]');
@@ -274,8 +319,56 @@ try {
   );
   assert.ok(mobile.result.value.width <= mobile.result.value.viewport - 30);
   assert.ok(mobile.result.value.scroll <= mobile.result.value.width);
+  const published = await send(
+    "Runtime.evaluate",
+    {
+      expression: `(async () => {
+         const wait = async (predicate) => {
+           for (let i = 0; i < 200; i++) { if (predicate()) return; await new Promise(resolve => setTimeout(resolve, 50)); }
+           throw new Error('Publish fixture condition timed out: ' + document.body.innerText);
+         };
+         const submit = () => document.querySelector('[role="dialog"] button[type="submit"]').click();
+         const upload = document.querySelector('#claim-upload');
+         upload.value = 'yes';
+         upload.dispatchEvent(new Event('change', { bubbles: true }));
+         await new Promise(resolve => setTimeout(resolve, 50));
+         window.rejectPublish = true;
+         submit();
+         await wait(() => document.querySelector('[role="alert"]'));
+         const staysOpenOnFailure = !!document.querySelector('[role="dialog"]');
+         window.rejectPublish = false;
+         window.echoPublish = true;
+         submit();
+         await wait(() => window.finishPublish);
+         await new Promise(resolve => setTimeout(resolve, 100));
+         if (!document.querySelector('[role="dialog"] button[type="submit"]')?.disabled)
+           throw new Error('Report update reset the publishing state before completion');
+         window.echoPublish = false;
+         window.finishPublish();
+         await wait(() => !document.querySelector('[role="dialog"]'));
+         const card = document.querySelector('article');
+         if (!card?.innerText.includes('Uploads')) throw new Error('Missing compact feature summary');
+         if (card.innerText.includes('server responses captured') || card.innerText.includes('HTTP 402'))
+           throw new Error('Technical check information is visible before expanding');
+         card.querySelector('summary').click();
+         if (!card.innerText.includes('4 server responses captured')) throw new Error('Missing expandable check details');
+         card.querySelector('summary').click();
+         [...document.querySelectorAll('button')].find(button => button.textContent === 'Open report').click();
+         await wait(() => document.querySelector('[role="dialog"] button[type="submit"]')?.textContent === 'Save my report');
+         submit();
+         await wait(() => !document.querySelector('[role="dialog"]'));
+         return { staysOpenOnFailure, closedAfterCreateAndEdit: true };
+       })()`,
+      awaitPromise: true,
+      returnByValue: true,
+    },
+    sessionId,
+  );
+  assert.equal(published.exceptionDetails, undefined, JSON.stringify(published.exceptionDetails));
+  assert.equal(published.result.value.staysOpenOnFailure, true);
+  assert.equal(published.result.value.closedAfterCreateAndEdit, true);
   console.log(
-    "Browser probes and report UI passed: CORS/header exposure, safe requests, 840px dialog, mobile fit, one Refresh action, collapsed technical data and separate detected hints.",
+    "Browser probes and report UI passed: safe requests, desktop/mobile fit, compact feature counts, collapsed report details, relay-echo publishing state, close after create/edit, and stay open on failure.",
   );
 } finally {
   socket?.close();

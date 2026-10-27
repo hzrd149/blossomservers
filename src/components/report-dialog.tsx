@@ -42,13 +42,23 @@ function ReportEditor({
   close: () => void;
 }) {
   const navigate = useNavigate();
-  const [data, setData] = useState<ServerReportData>(() => report?.data ?? emptyReport());
+  const [data, updateData] = useState<ServerReportData>(() => report?.data ?? emptyReport());
+  const edited = useRef(false);
+  const setData: typeof updateData = (value) => {
+    edited.current = true;
+    updateData(value);
+  };
   const [busy, setBusy] = useState(false);
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState<string>();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const controller = useRef<AbortController>();
   useEffect(() => () => controller.current?.abort(), []);
+  // A saved report may arrive after opening. Hydrate it without replacing a draft
+  // or remounting the editor when our own published event comes back from a relay.
+  useEffect(() => {
+    if (report && !busy && !edited.current) updateData(report.data);
+  }, [report, busy]);
 
   const claim = (capability: Capability, value: string) =>
     setData((previous) => ({
@@ -276,8 +286,7 @@ export function ReportDialog({ url, children }: { url?: string; children: ReactN
         <DialogHeader>
           <DialogTitle>{mine ? "Edit my server report" : "Report server capabilities"}</DialogTitle>
           <DialogDescription>
-            Share what you know about a server. Reports do not establish ownership, operator status or independent
-            verification.
+            Share what you know about this server’s features. Not sure about something? Leave it as Unknown.
           </DialogDescription>
         </DialogHeader>
         {!selected ? (
@@ -307,7 +316,7 @@ export function ReportDialog({ url, children }: { url?: string; children: ReactN
           </form>
         ) : reportServerUrl(selected) ? (
           <ReportEditor
-            key={`${pubkey}/${selected}/${mine?.event.id ?? "new"}`}
+            key={`${pubkey}/${selected}`}
             url={selected}
             report={mine}
             legacy={legacy}

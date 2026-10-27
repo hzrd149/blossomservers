@@ -38,10 +38,10 @@ export const ServerCard = memo(function ServerCard({ server }: { server: ServerS
 
       <p className="text-sm text-muted-foreground">
         {server.contributors.size
-          ? `${server.contributors.size} report contributors · View attributed details`
+          ? `${server.contributors.size} community ${server.contributors.size === 1 ? "report" : "reports"}`
           : server.announcements.length
-            ? "Legacy descriptions available · No capability reports"
-            : "Discovered through community references"}
+            ? "Community descriptions available"
+            : "Discovered by the community"}
       </p>
 
       <ServerBadges server={server} />
